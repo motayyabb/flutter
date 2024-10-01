@@ -21,6 +21,12 @@ A fun, interactive "Spin the Bottle" game developed with **Flutter**, where user
 |--------------|--------------|--------------|
 | ![Capture](https://github.com/user-attachments/assets/709cbf5e-41fb-4f07-94d0-12a872cb9dbe) | ![bottle](https://github.com/user-attachments/assets/f9d750e4-8b22-45d3-a436-def61d7ab05b) | ![second page](https://github.com/user-attachments/assets/261f9e7c-0167-4047-919f-cbbc7ec5951a) |
 
+#Demo video 
+
+
+https://github.com/user-attachments/assets/804d0729-3821-413d-847c-aec3f16b6839
+
+
 ## How to Run
 
 Follow these steps to run the project on your local machine:
