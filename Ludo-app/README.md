@@ -1,16 +1,37 @@
-# cointoss
+# Ludo Dice
 
-A new Flutter project.
+## Overview
+Ludo Dice is a simple and engaging Flutter application designed to simulate a dice-rolling game for up to four players. Players take turns rolling dice and accumulate scores, aiming to reach a score of 50 to win the game. The app features a user-friendly interface with animations for an enhanced gaming experience.
 
-## Getting Started
+## Features
+- **Multi-Player Support**: Supports up to four players.
+- **Dice Rolling**: Players can roll the dice by clicking a button, and the results are displayed with animations.
+- **Score Tracking**: Keeps track of each player's score and updates it after every roll.
+- **Winner Announcement**: Alerts the winner with a dialog once a player reaches 50 points.
+- **Play Again Option**: Allows players to restart the game after a winner is declared.
 
-This project is a starting point for a Flutter application.
+## Technologies Used
+- **Flutter**: A UI toolkit for building natively compiled applications for mobile, web, and desktop from a single codebase.
+- **Dart**: The programming language used to write the application.
 
-A few resources to get you started if this is your first Flutter project:
+## Usage
+- Open the app on your device or emulator.
+- Each player takes turns clicking the "Roll the Dice" button.
+- The score for each player is updated after each roll.
+- The game ends when a player reaches a score of 50, and a dialog will appear announcing the winner.
+- Players can choose to play again by clicking the "Play Again" button in the dialog.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Screenshots
+![Ludo Dice - Screen 1](https://github.com/user-attachments/assets/e10edb15-3e65-439e-8916-dca02c2ba4dd)
+![Ludo Dice - Screen 2](https://github.com/user-attachments/assets/fd47dbd1-f204-4241-a2ad-05a22b8a2b6a)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Code Structure
+- `main.dart`: The main entry point of the application.
+- `DiceApp`: A stateless widget that initializes the app and sets up the theme.
+- `DiceScreen`: A stateful widget that manages the game logic, including dice rolling, score tracking, and determining the winner.
+
+## Contributing
+Contributions are welcome! Feel free to fork the repository and submit pull requests.
+
+## License
+This project is licensed under the MIT License. See the `LICENSE` file for details.
