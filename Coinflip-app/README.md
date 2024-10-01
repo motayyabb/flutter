@@ -1,16 +1,21 @@
-# untitled1
+# Coin Toss App
 
-A new Flutter project.
+A simple Flutter application that simulates a coin toss. Users can toss a coin by pressing a button, and the app will animate the coin flip and display the result as either "Heads" or "Tails."
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- **Coin Flip Animation**: Enjoy a realistic animation of the coin flipping.
+- **Random Result Generation**: The app randomly determines whether the result is Heads or Tails.
+- **User-Friendly Interface**: A simple and clean UI that enhances user experience.
+- **Gradient Background**: The background features a beautiful gradient for an attractive look.
 
-A few resources to get you started if this is your first Flutter project:
+## Screenshots
+![tail](https://github.com/user-attachments/assets/c02ff841-e3a9-48e3-9454-e359772ad284)
+![head](https://github.com/user-attachments/assets/73c29171-9814-4c66-873c-9db89030c9c6)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installation
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/coin-toss-app.git
