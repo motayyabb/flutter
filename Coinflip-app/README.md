@@ -13,6 +13,11 @@ A simple Flutter application that simulates a coin toss. Users can toss a coin b
 ![tail](https://github.com/user-attachments/assets/c02ff841-e3a9-48e3-9454-e359772ad284)
 ![head](https://github.com/user-attachments/assets/73c29171-9814-4c66-873c-9db89030c9c6)
 
+## Demo Video 
+
+
+https://github.com/user-attachments/assets/af258a2f-1fdc-42b1-b977-0a30e03773bf
+
 
 ## Installation
 
