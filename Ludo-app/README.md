@@ -25,6 +25,20 @@ Ludo Dice is a simple and engaging Flutter application designed to simulate a di
 ![Ludo Dice - Screen 1](https://github.com/user-attachments/assets/e10edb15-3e65-439e-8916-dca02c2ba4dd)
 ![Ludo Dice - Screen 2](https://github.com/user-attachments/assets/fd47dbd1-f204-4241-a2ad-05a22b8a2b6a)
 
+## Demo video 
+
+
+
+https://github.com/user-attachments/assets/cdad124d-dffa-47f4-bff5-0c42702ee193
+
+
+
+https://github.com/user-attachments/assets/ed3313a5-9135-477a-b700-1a0f5f950aef
+
+
+https://github.com/user-attachments/assets/0cc6b337-9db4-443f-aa7a-1507cca4c368
+
+
 ## Code Structure
 - `main.dart`: The main entry point of the application.
 - `DiceApp`: A stateless widget that initializes the app and sets up the theme.
