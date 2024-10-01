@@ -22,8 +22,10 @@ Ludo Dice is a simple and engaging Flutter application designed to simulate a di
 - Players can choose to play again by clicking the "Play Again" button in the dialog.
 
 ## Screenshots
-![Ludo Dice - Screen 1](https://github.com/user-attachments/assets/e10edb15-3e65-439e-8916-dca02c2ba4dd)
-![Ludo Dice - Screen 2](https://github.com/user-attachments/assets/fd47dbd1-f204-4241-a2ad-05a22b8a2b6a)
+
+| Screenshot 1 | Screenshot 2 |
+|--------------|--------------|
+| ![Ludo Dice - Screen 1](https://github.com/user-attachments/assets/e10edb15-3e65-439e-8916-dca02c2ba4dd) | ![Ludo Dice - Screen 2](https://github.com/user-attachments/assets/fd47dbd1-f204-4241-a2ad-05a22b8a2b6a) |
 
 ## Demo video 
 
