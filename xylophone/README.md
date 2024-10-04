@@ -1,16 +1,35 @@
-# untitled
+# Customized Xylophone App - Flutter
 
-A new Flutter project.
+A fun and interactive **Xylophone** app developed with **Flutter**, allowing users to play musical notes by tapping on colorful keys and customize their experience!
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- **Musical Notes**: Play 7 different musical notes by tapping on the keys.
+- **Key Customization**: Change the color of each key using a color picker.
+- **Sound Selection**: Choose different sound files for each key.
+- **Responsive Design**: Optimized for various screen sizes with a user-friendly interface.
 
-A few resources to get you started if this is your first Flutter project:
+## Technologies Used
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Flutter** for the front-end and animations.
+- **Dart** for app logic and structure.
+- **Audioplayers** for audio playback.
+- **Flutter Color Picker** for color customization.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Screenshots
+
+| Screenshot 1 | Screenshot 2 |
+|--------------|--------------|
+| ![Xylophone Screenshot 1](https://example.com/screenshot1.png) | ![Xylophone Screenshot 2](https://example.com/screenshot2.png) |
+
+## Demo Video
+
+[Watch the Demo](https://example.com/demo-video)
+
+## How to Run
+
+Follow these steps to run the project on your local machine:
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/motayyabb/xylophone_app.git
