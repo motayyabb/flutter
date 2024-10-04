@@ -33,4 +33,4 @@ Follow these steps to run the project on your local machine:
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/spin-the-bottle-game.git
+git clone https://github.com/your-motayyabb/spin-bottle-app.git
