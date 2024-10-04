@@ -32,4 +32,4 @@ Follow these steps to run the project on your local machine:
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/xylophone_app.git
+git clone https://github.com/motayyabb/xylophone_app.git
