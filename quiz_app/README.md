@@ -19,12 +19,19 @@ A fun and interactive **Spin the Bottle** game developed with **Flutter**, where
 
 | Screenshot 1 | Screenshot 2 | Screenshot 3 |
 |--------------|--------------|--------------|
-| ![Capture](https://github.com/user-attachments/assets/709cbf5e-41fb-4f07-94d0-12a872cb9dbe) | ![Bottle](https://github.com/user-attachments/assets/f9d750e4-8b22-45d3-a436-def61d7ab05b) | ![Second Page](https://github.com/user-attachments/assets/261f9e7c-0167-4047-919f-cbbc7ec5951a) |
+| ![1000088206](https://github.com/user-attachments/assets/7fb7e7b3-6be9-4f95-81db-5cb34823001f)
+ | ![1000088207](https://github.com/user-attachments/assets/83d46d09-2864-407f-8f14-ebca75abf11b)
+|![1000088208](https://github.com/user-attachments/assets/f8f647af-7999-4f27-b706-5b96a514e640)
+ |
 
 ## Demo Video
 
 Watch the demo video to see the game in action:  
-[Spin the Bottle Demo](https://github.com/user-attachments/assets/804d0729-3821-413d-847c-aec3f16b6839)
+[Quiz app demo]
+
+https://github.com/user-attachments/assets/1d4d1c17-1f49-43ee-b23f-1a1b413879ba
+
+
 
 ## How to Run
 
@@ -34,4 +41,4 @@ Follow these steps to run the project on your local machine:
 
 ```bash
 git clone https://github.com/your-motayyabb/quiz_app.git
-cd spin-bottle-app
+cd quiz_app
