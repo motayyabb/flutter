@@ -22,6 +22,10 @@ A simple yet engaging **Quiz App** developed with **Flutter**. The app allows us
 
 ## Demo Video
 
+
+https://github.com/user-attachments/assets/e6d0ab15-78a3-4b77-8541-28b4558242da
+
+
 ## How to Run
 
 Follow these steps to run the project on your local machine:
