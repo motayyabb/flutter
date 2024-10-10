@@ -20,11 +20,16 @@ A fun and interactive **Xylophone** app developed with **Flutter**, allowing use
 
 | Screenshot 1 | Screenshot 2 |
 |--------------|--------------|
-| ![Xylophone Screenshot 1](https://example.com/screenshot1.png) | ![Xylophone Screenshot 2](https://example.com/screenshot2.png) |
+| ![Xylophone Screenshot 1](https://github.com/user-attachments/assets/7e6c53a3-3f88-4df5-9c79-4653964bee56) | ![Xylophone Screenshot 2](https://github.com/user-attachments/assets/b3b83db2-6b08-4bef-8c98-63bebe91d74b) |
+
 
 ## Demo Video
 
-[Watch the Demo](https://example.com/demo-video)
+
+
+https://github.com/user-attachments/assets/3c1ca901-80fa-49f6-b9dc-570f5169a32c
+
+
 
 ## How to Run
 
