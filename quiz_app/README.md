@@ -33,5 +33,5 @@ Follow these steps to run the project on your local machine:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-motayyabb/spin-bottle-app.git
+git clone https://github.com/your-motayyabb/quiz_app.git
 cd spin-bottle-app
