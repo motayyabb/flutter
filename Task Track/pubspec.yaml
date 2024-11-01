@@ -1,19 +1,19 @@
 name: tasktrack
-description: "A new Flutter project."
-publish_to: 'none'
+description: A task management app using Flutter and SQLite.
 
+# The version of the app.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"  # Ensure this matches your Flutter SDK version
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   sqflite: ^2.0.0+4
-  path: ^1.8.0
-  flutter_vector_icons: ^1.0.0
-
+  path_provider: ^2.0.11
+  # Add `flutter/foundation.dart` to check the platform type
+  foundation: any
 
 dev_dependencies:
   flutter_test:

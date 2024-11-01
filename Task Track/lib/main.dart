@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'database_helper.dart'; // Adjust this import based on your file structure
-import 'home_screen.dart'; // Ensure this is the correct path to your HomeScreen widget
+import 'home_screen.dart';
+import 'database_helper.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseHelper.instance.database; // Initialize the database
   runApp(MyApp());
 }
 
@@ -10,11 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Task Tracker',
+      title: 'Task Manager',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: HomeScreen(),
+      debugShowCheckedModeBanner: false, // Removes the debug banner
     );
   }
 }
