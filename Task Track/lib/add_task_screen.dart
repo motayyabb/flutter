@@ -3,10 +3,6 @@ import 'database_helper.dart';
 import 'task.dart';
 
 class AddTaskScreen extends StatefulWidget {
-  final Function onTaskAdded;
-
-  AddTaskScreen({required this.onTaskAdded});
-
   @override
   _AddTaskScreenState createState() => _AddTaskScreenState();
 }
@@ -34,30 +30,40 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Task'),
+        title: Text('Add Task', style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text("Task Title", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             TextField(
               onChanged: (value) {
                 title = value;
               },
-              decoration: InputDecoration(labelText: 'Title'),
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter task title',
+              ),
             ),
+            SizedBox(height: 20),
+            Text("Description", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             TextField(
               onChanged: (value) {
                 description = value;
               },
-              decoration: InputDecoration(labelText: 'Description'),
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter task description',
+              ),
             ),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(dueDate.isEmpty ? 'Select Due Date' : dueDate),
+                Text(dueDate.isEmpty ? 'Select Due Date' : dueDate, style: TextStyle(fontSize: 16)),
                 TextButton(
                   onPressed: () => _selectDate(context),
                   child: Text('Select Date', style: TextStyle(color: Colors.blueAccent)),
@@ -75,12 +81,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     isCompleted: false,
                     isRepeated: false,
                   ));
-                  widget.onTaskAdded(); // Notify the home screen to reload tasks
-                  Navigator.pop(context); // Go back to home screen
+                  Navigator.pop(context, true); // Return to home screen with success
                 }
               },
               child: Text('Add Task'),
-              style: ElevatedButton.styleFrom(primary: Colors.blueAccent),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
             ),
           ],
         ),
