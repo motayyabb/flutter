@@ -1,7 +1,7 @@
 name: tasktrack
-description: A task management app using Flutter and SQLite.
+description: A task management application with SQLite integration for CRUD operations.
+publish_to: "none" # This is a private project.
 
-# The version of the app.
 version: 1.0.0+1
 
 environment:
@@ -11,9 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
   sqflite: ^2.0.0+4
-  path_provider: ^2.0.11
-  # Add `flutter/foundation.dart` to check the platform type
-  foundation: any
+  path_provider: ^2.0.2
+
+
+
 
 dev_dependencies:
   flutter_test:
