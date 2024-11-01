@@ -4,11 +4,8 @@ import 'task.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
+  factory DatabaseHelper() => _instance;
   static Database? _database;
-
-  factory DatabaseHelper() {
-    return _instance;
-  }
 
   DatabaseHelper._internal();
 
@@ -25,46 +22,26 @@ class DatabaseHelper {
       version: 1,
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE tasks(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, dueDate TEXT, isCompleted INTEGER, isRepeated INTEGER)',
+          'CREATE TABLE tasks(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, due_date TEXT, is_completed INTEGER, is_repeated INTEGER)',
         );
       },
     );
   }
 
+  Future<List<Map<String, dynamic>>> getTasks() async {
+    final db = await database;
+    return await db.query('tasks');
+  }
+
   Future<void> insertTask(Task task) async {
     final db = await database;
-    await db.insert(
-      'tasks',
-      task.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    await db.insert('tasks', task.toMap());
   }
 
-  Future<List<Task>> getTasks() async {
+  Future<void> updateTask(int? id, Task task) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('tasks');
-
-    return List.generate(maps.length, (i) {
-      return Task.fromMap(maps[i]);
-    });
+    await db.update('tasks', task.toMap(), where: 'id = ?', whereArgs: [id]);
   }
 
-  Future<void> updateTask(Task task) async {
-    final db = await database;
-    await db.update(
-      'tasks',
-      task.toMap(),
-      where: 'id = ?',
-      whereArgs: [task.id],
-    );
-  }
-
-  Future<void> deleteTask(int id) async {
-    final db = await database;
-    await db.delete(
-      'tasks',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
+// Add more methods for delete, etc., if needed
 }

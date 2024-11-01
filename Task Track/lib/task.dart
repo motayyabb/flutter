@@ -3,7 +3,7 @@ class Task {
   final String title;
   final String description;
   final String dueDate;
-  late final bool isCompleted;
+  final bool isCompleted;
   final bool isRepeated;
 
   Task({
@@ -11,8 +11,8 @@ class Task {
     required this.title,
     required this.description,
     required this.dueDate,
-    this.isCompleted = false,
-    this.isRepeated = false,
+    required this.isCompleted,
+    required this.isRepeated,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,9 +20,9 @@ class Task {
       'id': id,
       'title': title,
       'description': description,
-      'dueDate': dueDate,
-      'isCompleted': isCompleted ? 1 : 0,
-      'isRepeated': isRepeated ? 1 : 0,
+      'due_date': dueDate,
+      'is_completed': isCompleted ? 1 : 0,
+      'is_repeated': isRepeated ? 1 : 0,
     };
   }
 
@@ -31,9 +31,9 @@ class Task {
       id: map['id'],
       title: map['title'],
       description: map['description'],
-      dueDate: map['dueDate'],
-      isCompleted: map['isCompleted'] == 1,
-      isRepeated: map['isRepeated'] == 1,
+      dueDate: map['due_date'],
+      isCompleted: map['is_completed'] == 1,
+      isRepeated: map['is_repeated'] == 1,
     );
   }
 }
