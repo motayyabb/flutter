@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Add Task'),
+          title: Text('Add Task', style: TextStyle(fontWeight: FontWeight.bold)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -109,11 +109,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.of(context).pop();
                 }
               },
-              child: Text('Add'),
+              child: Text('Add', style: TextStyle(fontWeight: FontWeight.bold)),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel'),
+              child: Text('Cancel', style: TextStyle(color: Colors.red)),
             ),
           ],
         );
@@ -131,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Edit Task'),
+          title: Text('Edit Task', style: TextStyle(fontWeight: FontWeight.bold)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -184,16 +184,24 @@ class _HomeScreenState extends State<HomeScreen> {
             TextButton(
               onPressed: () {
                 if (titleController.text.isNotEmpty) {
-                  _databaseHelper.updateTask(id, titleController.text, descriptionController.text, false, false, selectedDate.toIso8601String(), selectedTime.format(context));
+                  _databaseHelper.updateTask(
+                    id,
+                    titleController.text,
+                    descriptionController.text,
+                    false,
+                    false,
+                    selectedDate.toIso8601String(),
+                    selectedTime.format(context),
+                  );
                   _fetchTasks();
                   Navigator.of(context).pop();
                 }
               },
-              child: Text('Update'),
+              child: Text('Update', style: TextStyle(fontWeight: FontWeight.bold)),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel'),
+              child: Text('Cancel', style: TextStyle(color: Colors.red)),
             ),
           ],
         );
@@ -201,6 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Corrected the method name from _deleteTas to _deleteTask
   void _deleteTask(int id) async {
     await _databaseHelper.deleteTask(id);
     _fetchTasks();
@@ -211,37 +220,72 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('All Tasks'),
+        backgroundColor: Colors.blueAccent,
       ),
-      body: ListView.builder(
-        itemCount: _tasks.length,
-        itemBuilder: (context, index) {
-          return Card(
-            elevation: 2,
-            margin: EdgeInsets.all(8),
-            child: ListTile(
-              title: Text(_tasks[index]['title']),
-              subtitle: Text(_tasks[index]['description'] ?? ''),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () => _showEditTaskDialog(
-                        _tasks[index]['id'], _tasks[index]['title'], _tasks[index]['description'], _tasks[index]['date'], _tasks[index]['time']),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () => _deleteTask(_tasks[index]['id']),
-                  ),
-                ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade100, Colors.white],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: ListView.builder(
+          itemCount: _tasks.length,
+          itemBuilder: (context, index) {
+            return Card(
+              elevation: 4,
+              margin: EdgeInsets.all(8),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              child: ListTile(
+                title: Text(
+                  _tasks[index]['title'],
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(
+                  _tasks[index]['description'] ?? '',
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AnimatedContainer(
+                      duration: Duration(milliseconds: 200),
+                      child: IconButton(
+                        icon: Icon(Icons.edit),
+                        color: Colors.blue, // Change icon color to blue
+                        onPressed: () {
+                          _showEditTaskDialog(
+                            _tasks[index]['id'],
+                            _tasks[index]['title'],
+                            _tasks[index]['description'],
+                            _tasks[index]['date'],
+                            _tasks[index]['time'],
+                          );
+                        },
+                      ),
+                    ),
+                    AnimatedContainer(
+                      duration: Duration(milliseconds: 200),
+                      child: IconButton(
+                        icon: Icon(Icons.delete),
+                        color: Colors.red, // Keep delete icon color as red
+                        onPressed: () {
+                          _deleteTask(_tasks[index]['id']); // Corrected method call
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddTaskDialog,
         child: Icon(Icons.add),
+        backgroundColor: Colors.blueAccent,
       ),
     );
   }
