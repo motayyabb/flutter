@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class CompletedTasksScreen extends StatelessWidget {
-  final List<Map<String, dynamic>> completedTasks;
+class TodayTasksScreen extends StatelessWidget {
+  final List<Map<String, dynamic>> todayTasks;
 
-  CompletedTasksScreen({required this.completedTasks});
+  TodayTasksScreen({required this.todayTasks});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Completed Tasks'),
+        title: Text('Today\'s Tasks'),
         backgroundColor: Colors.blueAccent,
         elevation: 0,
       ),
@@ -21,17 +21,17 @@ class CompletedTasksScreen extends StatelessWidget {
             end: Alignment.bottomRight,
           ),
         ),
-        child: completedTasks.isEmpty
+        child: todayTasks.isEmpty
             ? Center(
           child: Text(
-            'No completed tasks yet.',
+            'No tasks for today.',
             style: TextStyle(fontSize: 18, color: Colors.black54),
           ),
         )
             : ListView.builder(
-          itemCount: completedTasks.length,
+          itemCount: todayTasks.length,
           itemBuilder: (context, index) {
-            final task = completedTasks[index];
+            final task = todayTasks[index];
             return Card(
               margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               shape: RoundedRectangleBorder(
@@ -61,7 +61,7 @@ class CompletedTasksScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      'Completed on: ${task['completionDate']}', // Assuming you have a completion date field
+                      'Due: ${task['dueDate']}', // Assuming you have a due date field
                       style: TextStyle(
                         fontSize: 14,
                         fontStyle: FontStyle.italic,

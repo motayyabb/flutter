@@ -5,7 +5,13 @@ class Task {
   final String dueDate;
   final bool isCompleted;
 
-  Task({this.id, required this.title, required this.description, required this.dueDate, this.isCompleted = false});
+  Task({
+    this.id,
+    required this.title,
+    required this.description,
+    required this.dueDate,
+    this.isCompleted = false,
+  });
 
   Map<String, dynamic> toMap() {
     return {
