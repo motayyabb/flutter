@@ -5,22 +5,18 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.5.3
+  sdk: ">=2.18.0 <3.0.0"  # Ensure this matches your Flutter SDK version
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
-  sqflite: ^2.0.0+4  # SQLite database
-  path_provider: ^2.0.0  # For finding the correct path for the database
-  flutter_local_notifications: ^10.0.0  # Local notifications
-  intl: ^0.17.0  # For date formatting
-  csv: ^5.0.0  # For CSV export
-  pdf: ^3.0.0  # For PDF export
+  sqflite: ^2.0.0+4
+  path: ^1.8.0
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
 flutter:
-  uses-material-design: true  # Ensure material design is enabled
+  uses-material-design: true

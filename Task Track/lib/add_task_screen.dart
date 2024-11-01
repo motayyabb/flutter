@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'database_helper.dart';
-import 'task.dart';
+import 'models/task.dart';
 
 class AddTaskScreen extends StatefulWidget {
   @override
@@ -8,86 +8,51 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
-  final DatabaseHelper dbHelper = DatabaseHelper();
-  String title = '';
-  String description = '';
-  String dueDate = '';
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != DateTime.now())
-      setState(() {
-        dueDate = "${picked.toLocal()}".split(' ')[0]; // Format date as needed
-      });
-  }
+  final _formKey = GlobalKey<FormState>();
+  String _title = '';
+  String _description = '';
+  String _dueDate = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Task', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.blueAccent,
+        title: Text('Add Task'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Task Title", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            TextField(
-              onChanged: (value) {
-                title = value;
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter task title',
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Title'),
+                onSaved: (value) => _title = value!,
+                validator: (value) => value!.isEmpty ? 'Please enter a title' : null,
               ),
-            ),
-            SizedBox(height: 20),
-            Text("Description", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            TextField(
-              onChanged: (value) {
-                description = value;
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter task description',
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Description'),
+                onSaved: (value) => _description = value!,
+                validator: (value) => value!.isEmpty ? 'Please enter a description' : null,
               ),
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(dueDate.isEmpty ? 'Select Due Date' : dueDate, style: TextStyle(fontSize: 16)),
-                TextButton(
-                  onPressed: () => _selectDate(context),
-                  child: Text('Select Date', style: TextStyle(color: Colors.blueAccent)),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                if (title.isNotEmpty && dueDate.isNotEmpty) {
-                  dbHelper.insertTask(Task(
-                    title: title,
-                    description: description,
-                    dueDate: dueDate,
-                    isCompleted: false,
-                    isRepeated: false,
-                  ));
-                  Navigator.pop(context, true); // Return to home screen with success
-                }
-              },
-              child: Text('Add Task'),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
-            ),
-          ],
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Due Date (YYYY-MM-DD)'),
+                onSaved: (value) => _dueDate = value!,
+                validator: (value) => value!.isEmpty ? 'Please enter a due date' : null,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+                    await DatabaseHelper().insertTask(Task(title: _title, description: _description, dueDate: _dueDate));
+                    Navigator.pop(context);
+                  }
+                },
+                child: Text('Add Task'),
+              ),
+            ],
+          ),
         ),
       ),
     );

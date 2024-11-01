@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'home_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(TaskTrackApp());
 }
 
-class MyApp extends StatelessWidget {
+class TaskTrackApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Task Manager',
+      title: 'TaskTrack',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
