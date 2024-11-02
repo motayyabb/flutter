@@ -1,3 +1,4 @@
+// home_screen.dart
 import 'package:flutter/material.dart';
 import 'database_helper.dart';
 
@@ -7,73 +8,75 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Map<String, dynamic>> tasks = [];
+  final DatabaseHelper _databaseHelper = DatabaseHelper();
+  List<Map<String, dynamic>> _tasks = [];
 
   @override
   void initState() {
     super.initState();
-    _loadTasks();
+    _fetchTasks();
   }
 
-  Future<void> _loadTasks() async {
-    final data = await DatabaseHelper.instance.getTasks();
+  void _fetchTasks() async {
+    List<Map<String, dynamic>> tasks = await _databaseHelper.getTasks();
     setState(() {
-      tasks = data;
+      _tasks = tasks;
     });
   }
 
-  void _markAsCompleted(int id) async {
-    await DatabaseHelper.instance.markAsCompleted(id);
-    _loadTasks();
+  void _addTask(String title) async {
+    await _databaseHelper.insertTask(title);
+    _fetchTasks();
   }
 
-  void _deleteTask(int id) async {
-    await DatabaseHelper.instance.deleteTask(id);
-    _loadTasks();
+  void _showAddTaskDialog() {
+    final TextEditingController _controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Add Task'),
+          content: TextField(
+            controller: _controller,
+            decoration: InputDecoration(hintText: 'Task Title'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                if (_controller.text.isNotEmpty) {
+                  _addTask(_controller.text);
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text('Add'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Task Manager')),
+      appBar: AppBar(
+        title: Text('Task Manager'),
+      ),
       body: ListView.builder(
-        itemCount: tasks.length,
+        itemCount: _tasks.length,
         itemBuilder: (context, index) {
-          final task = tasks[index];
           return ListTile(
-            title: Text(task['title']),
-            subtitle: Text('${task['date']} at ${task['time']}'),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.check, color: task['isCompleted'] == 1 ? Colors.green : Colors.grey),
-                  onPressed: () => _markAsCompleted(task['id']),
-                ),
-                IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
-                  onPressed: () => _deleteTask(task['id']),
-                ),
-              ],
-            ),
+            title: Text(_tasks[index]['title']),
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/addTask').then((_) => _loadTasks());
-        },
+        onPressed: _showAddTaskDialog,
         child: Icon(Icons.add),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 8.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(icon: Icon(Icons.home), onPressed: _loadTasks),
-          ],
-        ),
       ),
     );
   }

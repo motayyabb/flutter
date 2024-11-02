@@ -1,3 +1,4 @@
+// completed_tasks_screen.dart
 import 'package:flutter/material.dart';
 import 'database_helper.dart';
 
@@ -17,7 +18,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
   }
 
   void _fetchCompletedTasks() async {
-    List<Map<String, dynamic>> tasks = await _databaseHelper.getCompletedTasks();
+    List<Map<String, dynamic>> tasks = await _databaseHelper.getTasks(completed: true);
     setState(() {
       _completedTasks = tasks;
     });
@@ -28,25 +29,19 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Completed Tasks'),
+        centerTitle: true,
       ),
       body: _completedTasks.isEmpty
-          ? Center(child: Text('No completed tasks', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)))
+          ? Center(child: Text('No completed tasks yet!'))
           : ListView.builder(
         itemCount: _completedTasks.length,
         itemBuilder: (context, index) {
+          final task = _completedTasks[index];
           return Card(
-            elevation: 4,
-            margin: EdgeInsets.all(8),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            margin: EdgeInsets.all(8.0),
             child: ListTile(
-              title: Text(
-                _completedTasks[index]['title'],
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-              subtitle: Text(
-                _completedTasks[index]['description'] ?? '',
-                style: TextStyle(color: Colors.grey[600]),
-              ),
+              title: Text(task['title'], style: TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Text('Completed on: ${task['datetime']}'),
             ),
           );
         },

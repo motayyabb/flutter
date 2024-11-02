@@ -1,11 +1,14 @@
+// database_helper.dart
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
-  static final DatabaseHelper instance = DatabaseHelper._init();
+  static final DatabaseHelper _instance = DatabaseHelper._internal();
+  factory DatabaseHelper() => _instance;
+
   static Database? _database;
 
-  DatabaseHelper._init();
+  DatabaseHelper._internal();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -14,46 +17,26 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDB(String filePath) async {
-    final dbPath = await getDatabasesPath();
-    final path = join(dbPath, filePath);
+    String path = join(await getDatabasesPath(), filePath);
     return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
   Future _createDB(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE tasks (
+      CREATE TABLE tasks(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        description TEXT,
-        date TEXT,
-        time TEXT,
-        isCompleted INTEGER NOT NULL
+        title TEXT
       )
     ''');
   }
 
-  Future<int> addTask(Map<String, dynamic> task) async {
-    final db = await instance.database;
-    return await db.insert('tasks', task);
+  Future<void> insertTask(String title) async {
+    final db = await database;
+    await db.insert('tasks', {'title': title});
   }
 
   Future<List<Map<String, dynamic>>> getTasks() async {
-    final db = await instance.database;
+    final db = await database;
     return await db.query('tasks');
-  }
-
-  Future<int> updateTask(Map<String, dynamic> task) async {
-    final db = await instance.database;
-    return await db.update('tasks', task, where: 'id = ?', whereArgs: [task['id']]);
-  }
-
-  Future<int> deleteTask(int id) async {
-    final db = await instance.database;
-    return await db.delete('tasks', where: 'id = ?', whereArgs: [id]);
-  }
-
-  Future<int> markAsCompleted(int id) async {
-    final db = await instance.database;
-    return await db.update('tasks', {'isCompleted': 1}, where: 'id = ?', whereArgs: [id]);
   }
 }

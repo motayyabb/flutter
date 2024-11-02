@@ -1,19 +1,18 @@
+// main.dart
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
-import 'add_task_screen.dart';
 
-void main() => runApp(TaskManagerApp());
+void main() {
+  runApp(MyApp());
+}
 
-class TaskManagerApp extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Task Manager',
-      initialRoute: '/',
-      routes: {
-        '/': (context) => HomeScreen(),
-        '/addTask': (context) => AddTaskScreen(),
-      },
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: HomeScreen(),
     );
   }
 }

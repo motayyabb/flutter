@@ -21,7 +21,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       'isCompleted': 0,
     };
     await DatabaseHelper.instance.addTask(task);
-    Navigator.pop(context);
+
+    // Show confirmation message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Task added successfully!')),
+    );
+
+    // Go back to home screen and refresh the task list
+    Navigator.pop(context, true);  // Passing true to indicate a new task was added
   }
 
   Future<void> _selectDate() async {
