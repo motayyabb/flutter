@@ -25,7 +25,8 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE tasks(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT
+        title TEXT,
+        completed INTEGER DEFAULT 0
       )
     ''');
   }
@@ -35,8 +36,13 @@ class DatabaseHelper {
     await db.insert('tasks', {'title': title});
   }
 
-  Future<List<Map<String, dynamic>>> getTasks() async {
+  Future<void> markTaskAsCompleted(int id) async {
     final db = await database;
-    return await db.query('tasks');
+    await db.update('tasks', {'completed': 1}, where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<List<Map<String, dynamic>>> getTasks({bool completed = false}) async {
+    final db = await database;
+    return await db.query('tasks', where: 'completed = ?', whereArgs: [completed ? 1 : 0]);
   }
 }

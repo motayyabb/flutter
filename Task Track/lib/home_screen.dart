@@ -1,6 +1,7 @@
 // home_screen.dart
 import 'package:flutter/material.dart';
 import 'database_helper.dart';
+import 'completed_tasks_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -26,6 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _addTask(String title) async {
     await _databaseHelper.insertTask(title);
+    _fetchTasks();
+  }
+
+  void _markTaskAsCompleted(int id) async {
+    await _databaseHelper.markTaskAsCompleted(id);
     _fetchTasks();
   }
 
@@ -71,12 +77,40 @@ class _HomeScreenState extends State<HomeScreen> {
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(_tasks[index]['title']),
+            trailing: IconButton(
+              icon: Icon(Icons.check),
+              onPressed: () {
+                _markTaskAsCompleted(_tasks[index]['id']);
+              },
+            ),
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddTaskDialog,
         child: Icon(Icons.add),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.check_circle),
+            label: 'Completed',
+          ),
+        ],
+        onTap: (index) {
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CompletedTasksScreen(),
+              ),
+            );
+          }
+        },
       ),
     );
   }

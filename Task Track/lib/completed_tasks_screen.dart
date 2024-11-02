@@ -29,20 +29,12 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Completed Tasks'),
-        centerTitle: true,
       ),
-      body: _completedTasks.isEmpty
-          ? Center(child: Text('No completed tasks yet!'))
-          : ListView.builder(
+      body: ListView.builder(
         itemCount: _completedTasks.length,
         itemBuilder: (context, index) {
-          final task = _completedTasks[index];
-          return Card(
-            margin: EdgeInsets.all(8.0),
-            child: ListTile(
-              title: Text(task['title'], style: TextStyle(fontWeight: FontWeight.bold)),
-              subtitle: Text('Completed on: ${task['datetime']}'),
-            ),
+          return ListTile(
+            title: Text(_completedTasks[index]['title']),
           );
         },
       ),

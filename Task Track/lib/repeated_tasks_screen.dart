@@ -1,3 +1,4 @@
+// repeated_tasks_screen.dart
 import 'package:flutter/material.dart';
 import 'database_helper.dart';
 
@@ -8,18 +9,18 @@ class RepeatedTasksScreen extends StatefulWidget {
 
 class _RepeatedTasksScreenState extends State<RepeatedTasksScreen> {
   final DatabaseHelper _databaseHelper = DatabaseHelper();
-  List<Map<String, dynamic>> _tasks = [];
+  List<Map<String, dynamic>> _repeatedTasks = [];
 
   @override
   void initState() {
     super.initState();
-    _fetchTasks();
+    _fetchRepeatedTasks();
   }
 
-  void _fetchTasks() async {
+  void _fetchRepeatedTasks() async {
     List<Map<String, dynamic>> tasks = await _databaseHelper.getRepeatedTasks();
     setState(() {
-      _tasks = tasks;
+      _repeatedTasks = tasks;
     });
   }
 
@@ -29,25 +30,11 @@ class _RepeatedTasksScreenState extends State<RepeatedTasksScreen> {
       appBar: AppBar(
         title: Text('Repeated Tasks'),
       ),
-      body: _tasks.isEmpty
-          ? Center(child: Text('No repeated tasks', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)))
-          : ListView.builder(
-        itemCount: _tasks.length,
+      body: ListView.builder(
+        itemCount: _repeatedTasks.length,
         itemBuilder: (context, index) {
-          return Card(
-            elevation: 4,
-            margin: EdgeInsets.all(8),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            child: ListTile(
-              title: Text(
-                _tasks[index]['title'],
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-              subtitle: Text(
-                _tasks[index]['description'] ?? '',
-                style: TextStyle(color: Colors.grey[600]),
-              ),
-            ),
+          return ListTile(
+            title: Text(_repeatedTasks[index]['title']),
           );
         },
       ),
