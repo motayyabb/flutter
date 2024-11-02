@@ -29,15 +29,24 @@ class _TodayTasksScreenState extends State<TodayTasksScreen> {
       appBar: AppBar(
         title: Text('Today\'s Tasks'),
       ),
-      body: ListView.builder(
+      body: _tasks.isEmpty
+          ? Center(child: Text('No tasks for today', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)))
+          : ListView.builder(
         itemCount: _tasks.length,
         itemBuilder: (context, index) {
           return Card(
-            elevation: 2,
+            elevation: 4,
             margin: EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             child: ListTile(
-              title: Text(_tasks[index]['title']),
-              subtitle: Text(_tasks[index]['description'] ?? ''),
+              title: Text(
+                _tasks[index]['title'],
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              subtitle: Text(
+                _tasks[index]['description'] ?? '',
+                style: TextStyle(color: Colors.grey[600]),
+              ),
             ),
           );
         },

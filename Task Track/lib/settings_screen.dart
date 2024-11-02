@@ -21,16 +21,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         title: Text('Settings'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Toggle Dark Mode:'),
-            Switch(
-              value: _isDarkMode,
-              onChanged: _toggleDarkMode,
-            ),
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade100, Colors.white],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Toggle Dark Mode:',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              Switch(
+                value: _isDarkMode,
+                onChanged: _toggleDarkMode,
+                activeColor: Colors.blue,
+              ),
+            ],
+          ),
         ),
       ),
     );
