@@ -1,5 +1,6 @@
 name: tasktrack
 description: "A new Flutter project."
+
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -7,12 +8,16 @@ version: 1.0.0+1
 environment:
   sdk: ^3.5.3
 
+
 dependencies:
   flutter:
     sdk: flutter
-  sqflite: ^2.0.0+4
-  path: ^1.8.0
-  cupertino_icons: ^1.0.8
+  sqflite: ^2.0.0+3  # Upgrade to a null-safe version
+  path_provider: ^2.0.11
+  flutter_spinkit: ^5.1.0  # Check for a null-safe version
+  cupertino_icons: ^1.0.0
+  carousel_slider: ^4.0.0  # Update to a null-safe version if available
+  intl: ^0.17.0 # For date formatting
 
 dev_dependencies:
   flutter_test:
