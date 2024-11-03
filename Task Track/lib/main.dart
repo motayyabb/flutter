@@ -123,70 +123,110 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  Widget _buildTaskList(bool completed, bool repeated) {
-    return FutureBuilder<List<Map<String, dynamic>>>(
-      future: widget.getTasks(completed: completed, repeated: repeated),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
-        }
-        final tasks = snapshot.data!;
-        return ListView.builder(
-          itemCount: tasks.length,
-          itemBuilder: (context, index) {
-            final task = tasks[index];
-            return ListTile(
-              title: Text(task['title']),
-              subtitle: Text(task['description']),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      // Call updateTask here
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () => widget.deleteTask(task['id']),
-                  ),
-                  if (!completed)
-                    IconButton(
-                      icon: Icon(Icons.check),
-                      onPressed: () => widget.markTaskAsCompleted(task['id']),
-                    ),
-                ],
-              ),
-            );
-          },
+  Widget _buildTaskCard(Map<String, dynamic> task) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(task['title'], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            SizedBox(height: 8),
+            Text(task['description']),
+            SizedBox(height: 8),
+            LinearProgressIndicator(
+              value: task['isCompleted'] == 1 ? 1.0 : 0.2, // Example progress
+              backgroundColor: Colors.grey[200],
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDailyTaskList(List<Map<String, dynamic>> tasks) {
+    return ListView.builder(
+      padding: EdgeInsets.all(16),
+      itemCount: tasks.length,
+      itemBuilder: (context, index) {
+        final task = tasks[index];
+        return Card(
+          margin: EdgeInsets.only(bottom: 16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: ListTile(
+            title: Text(
+              task['title'],
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            subtitle: Text(task['description']),
+            trailing: task['isCompleted'] == 1
+                ? Icon(Icons.check_circle, color: Colors.green)
+                : Icon(Icons.radio_button_unchecked, color: Colors.grey),
+          ),
         );
       },
     );
   }
 
   Widget _buildBody() {
-    switch (_selectedIndex) {
-      case 0:
-        return _buildTaskList(false, false); // Active Tasks
-      case 1:
-        return AddTaskScreen(onSubmit: widget.insertTask);
-      case 2:
-        return _buildTaskList(true, false); // Completed Tasks
-      case 3:
-        return _buildTaskList(false, true); // Repeated Tasks
-      case 4:
-        return SettingsScreen(toggleTheme: widget.toggleTheme);
-      default:
-        return _buildTaskList(false, false);
+    if (_selectedIndex == 0) {
+      return FutureBuilder<List<Map<String, dynamic>>>(
+        future: widget.getTasks(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+          final tasks = snapshot.data!;
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  "Main Tasks",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Expanded(child: _buildDailyTaskList(tasks)),
+            ],
+          );
+        },
+      );
+    } else if (_selectedIndex == 1) {
+      return AddTaskScreen(onSubmit: widget.insertTask);
+    } else {
+      return Center(
+        child: Text("Settings or other screens"),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Task Management App")),
-      body: _buildBody(),
+      appBar: AppBar(
+        title: Text("Task Management App"),
+        backgroundColor: Colors.teal,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: widget.toggleTheme,
+          )
+        ],
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.teal, Colors.blueAccent],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: _buildBody(),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
@@ -197,10 +237,12 @@ class _HomeScreenState extends State<HomeScreen> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.add), label: "Add Task"),
-          BottomNavigationBarItem(icon: Icon(Icons.check), label: "Completed"),
-          BottomNavigationBarItem(icon: Icon(Icons.repeat), label: "Repeated"),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
         ],
+        selectedItemColor: Colors.blueAccent,
+        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.white,
+        elevation: 10,
       ),
     );
   }
@@ -217,38 +259,25 @@ class AddTaskScreen extends StatelessWidget {
     final descriptionController = TextEditingController();
     bool isRepeated = false;
 
-    return Column(
-      children: [
-        TextField(controller: titleController, decoration: InputDecoration(labelText: "Title")),
-        TextField(controller: descriptionController, decoration: InputDecoration(labelText: "Description")),
-        SwitchListTile(
-          title: Text("Repeat Task"),
-          value: isRepeated,
-          onChanged: (value) => isRepeated = value,
-        ),
-        ElevatedButton(
-          onPressed: () {
-            onSubmit(titleController.text, descriptionController.text, isRepeated);
-          },
-          child: Text("Add Task"),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          TextField(controller: titleController, decoration: InputDecoration(labelText: "Title")),
+          TextField(controller: descriptionController, decoration: InputDecoration(labelText: "Description")),
+          SwitchListTile(
+            title: Text("Repeat Task"),
+            value: isRepeated,
+            onChanged: (value) => isRepeated = value,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              onSubmit(titleController.text, descriptionController.text, isRepeated);
+            },
+            child: Text("Add Task"),
+          ),
+        ],
+      ),
     );
   }
-}
-
-class SettingsScreen extends StatelessWidget {
-  final VoidCallback toggleTheme;
-
-  SettingsScreen({required this.toggleTheme});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-        child: ElevatedButton(
-            onPressed: toggleTheme,
-            child: Text("Toggle Dark/Light Theme"),
-         ),
-        );
-    }
 }
