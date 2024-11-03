@@ -1,91 +1,145 @@
 import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart';
-import 'package:device_info_plus/device_info_plus.dart';
- 
-import '../widget/app_theme.dart';
-import '../providers/tasks_provider.dart';
-import '../screens/tasks/add_task_screen.dart';
-import '../screens/tasks/user_task_screen.dart';
-import '../screens/splash_screen.dart';
-import '../providers/auth.dart';
-import '../screens/user_add_screen.dart';
-import '../providers/user_provider.dart';
-import '../screens/user_detail_screen.dart';
-import '../screens/tabs_screen.dart';
-import '../screens/notes/user_note_screen.dart';
-import '../providers/notes_provider.dart';
-import '../screens/notes/add_note_screen.dart';
-import '../helper/scroll_behaviour.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final deviceInfo = await DeviceInfoPlugin().deviceInfo;
-  final androidSdkVersion =
-      deviceInfo is AndroidDeviceInfo ? deviceInfo.version.sdkInt : 0;
-  runApp(MyApp(androidSdkVersion: androidSdkVersion));
+void main() {
+  runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key, required this.androidSdkVersion}) : super(key: key);
-  final int androidSdkVersion;
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(
-          value: TasksProvider(),
-        ),
-        ChangeNotifierProvider.value(
-          value: Auth(),
-        ),
-        ChangeNotifierProvider.value(
-          value: UserProvider(),
-        ),
-        ChangeNotifierProvider.value(
-          value: NotesProvider(),
-        ),
-      ],
-      child: Consumer<Auth>(
-        builder: (context, auth, _) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            scrollBehavior: CustomScrollBehavior(
-              androidSdkVersion: widget.androidSdkVersion,
+    return MaterialApp(
+      title: 'Task Manager',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Task Manager'),
+        backgroundColor: Colors.blueAccent,
+        elevation: 4.0,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Welcome to Task Manager',
+              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
-            theme: Provider.of<UserProvider>(context).isDark
-                ? DarkTheme.darkThemeData
-                : LightTheme.lightThemeData,
-            home: auth.isAuth
-                ? const Tabs()
-                : FutureBuilder(
-                    future: auth.tryLogin(),
-                    builder: (context, snapshot) =>
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? Container(
-                                color: Colors.white,
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              )
-                            : const SplashScreen(),
+            SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {
+                // Add task functionality
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              ),
+              child: Text(
+                'Add New Task',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
+              height: 250,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
                   ),
-            routes: {
-              AddTask.routeName: (ctx) => const AddTask(),
-              UserTaskScreen.routeName: (ctx) => const UserTaskScreen(),
-              UserAddScreen.routeName: (ctx) => const UserAddScreen(),
-              UserDetailScreen.routeName: (ctx) => const UserDetailScreen(),
-              Tabs.routeName: (ctx) => const Tabs(),
-              UserNoteScreen.routeName: (ctx) => const UserNoteScreen(),
-              AddNote.routeName: (ctx) => const AddNote(),
-            },
-          );
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  'Your Tasks will appear here',
+                  style: TextStyle(fontSize: 20, color: Colors.grey),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Add new task functionality
+        },
+        backgroundColor: Colors.blueAccent,
+        child: Icon(Icons.add),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_task),
+            label: 'Add Task',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.today),
+            label: 'Today\'s Tasks',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.replay),
+            label: 'Repeated Tasks',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.done),
+            label: 'Completed Tasks',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
+        currentIndex: 1, // Set the default selected index
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
+        backgroundColor: Colors.blueAccent,
+        showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
+        onTap: (index) {
+          // Handle tap events
+          switch (index) {
+            case 0:
+            // Navigate to Add Task screen
+              break;
+            case 1:
+            // Navigate to Home screen
+              break;
+            case 2:
+            // Navigate to Today's Tasks screen
+              break;
+            case 3:
+            // Navigate to Repeated Tasks screen
+              break;
+            case 4:
+            // Navigate to Completed Tasks screen
+              break;
+            case 5:
+            // Navigate to Settings screen
+              break;
+          }
         },
       ),
     );
