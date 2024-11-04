@@ -1,28 +1,26 @@
+// database_helper.dart
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
-  static Database? _database;
-
-  // Singleton instance
-  factory DatabaseHelper() {
-    return _instance;
-  }
+  factory DatabaseHelper() => _instance;
 
   DatabaseHelper._internal();
 
+  late Database _database;
+
   Future<Database> get database async {
-    if (_database != null) return _database!;
+    if (_database != null) return _database;
     _database = await _initDatabase();
-    return _database!;
+    return _database;
   }
 
   Future<Database> _initDatabase() async {
     return await openDatabase(
       join(await getDatabasesPath(), 'task_database.db'),
-      onCreate: (db, version) async {
-        await db.execute(
+      onCreate: (db, version) {
+        return db.execute(
           'CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT, description TEXT, isCompleted INTEGER, isRepeated INTEGER)',
         );
       },
@@ -30,11 +28,11 @@ class DatabaseHelper {
     );
   }
 
-  Future<void> insertTask(String title, String description, bool isRepeated) async {
+  Future<void> insertTask(Map<String, dynamic> task) async {
     final db = await database;
     await db.insert(
       'tasks',
-      {'title': title, 'description': description, 'isCompleted': 0, 'isRepeated': isRepeated ? 1 : 0},
+      task,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'database_helper.dart';
 
 void main() {
   runApp(TaskManagementApp());
@@ -12,83 +13,112 @@ class TaskManagementApp extends StatefulWidget {
 }
 
 class _TaskManagementAppState extends State<TaskManagementApp> {
-  final DatabaseHelper dbHelper = DatabaseHelper();
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+  late Database database;
+  late FlutterLocalNotificationsPlugin localNotificationsPlugin;
   bool isDarkMode = false;
+  bool areNotificationsEnabled = true; // To toggle notifications
 
   @override
   void initState() {
     super.initState();
-    _initializeNotifications();
+    initDatabase();
+    initNotifications();
   }
 
-  void _initializeNotifications() {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
-    const InitializationSettings initializationSettings =
-    InitializationSettings(android: initializationSettingsAndroid);
-
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  }
-
-  Future<void> _showNotification(String title, String body) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails('your_channel_id', 'your_channel_name',
-        importance: Importance.high, priority: Priority.high);
-    const NotificationDetails platformChannelSpecifics =
-    NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      title,
-      body,
-      platformChannelSpecifics,
+  Future<void> initDatabase() async {
+    database = await openDatabase(
+      join(await getDatabasesPath(), 'task_database.db'),
+      onCreate: (db, version) {
+        return db.execute(
+          'CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT, description TEXT, isCompleted INTEGER, isRepeated INTEGER)',
+        );
+      },
+      version: 1,
     );
   }
 
-  Future<void> insertTask(String title, String description, bool isRepeated) async {
-    bool taskExists = await dbHelper.checkTaskExists(title);
-    if (taskExists) {
-      _showNotification("Duplicate Task", "Task '$title' already exists.");
-    } else {
-      await dbHelper.insertTask(title, description, isRepeated);
-      _showNotification("Task Added", "New task '$title' has been added.");
+  Future<void> initNotifications() async {
+    localNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+    const InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+    );
+
+    await localNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future<void> showNotification(String title, String body) async {
+    if (areNotificationsEnabled) {
+      const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails('task_channel', 'Task Notifications',
+          channelDescription: 'Notifications for task management',
+          importance: Importance.max,
+          priority: Priority.high,
+          ticker: 'ticker');
+      const NotificationDetails platformChannelSpecifics =
+      NotificationDetails(android: androidPlatformChannelSpecifics);
+      await localNotificationsPlugin.show(
+          0, title, body, platformChannelSpecifics);
     }
+  }
+
+  Future<void> insertTask(String title, String description, bool isRepeated) async {
+    await database.insert(
+      'tasks',
+      {
+        'title': title,
+        'description': description,
+        'isCompleted': 0,
+        'isRepeated': isRepeated ? 1 : 0
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    await showNotification("Task Added", "A new task has been added.");
     setState(() {});
   }
 
   Future<List<Map<String, dynamic>>> getTasks({bool completed = false, bool repeated = false}) async {
-    return await dbHelper.getTasks(completed: completed, repeated: repeated);
+    return await database.query(
+      'tasks',
+      where: 'isCompleted = ? AND isRepeated = ?',
+      whereArgs: [completed ? 1 : 0, repeated ? 1 : 0],
+    );
   }
 
   Future<void> markTaskAsCompleted(int id) async {
-    await dbHelper.markTaskAsCompleted(id);
+    await database.update(
+      'tasks',
+      {'isCompleted': 1},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
     setState(() {});
   }
 
   Future<void> deleteTask(int id) async {
-    await dbHelper.deleteTask(id);
+    await database.delete(
+      'tasks',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
     setState(() {});
   }
 
   Future<void> updateTask(int id, String title, String description) async {
-    await dbHelper.updateTask(id, title, description);
+    await database.update(
+      'tasks',
+      {'title': title, 'description': description},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.blue[700],
-          foregroundColor: Colors.white,
-        ),
-        brightness: isDarkMode ? Brightness.dark : Brightness.light,
-      ),
+      theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
       home: HomeScreen(
         insertTask: insertTask,
         getTasks: getTasks,
@@ -100,13 +130,15 @@ class _TaskManagementAppState extends State<TaskManagementApp> {
             isDarkMode = !isDarkMode;
           });
         },
+        toggleNotifications: () {
+          setState(() {
+            areNotificationsEnabled = !areNotificationsEnabled;
+          });
+        },
+        areNotificationsEnabled: areNotificationsEnabled,
       ),
     );
   }
-}
-
-extension on DatabaseHelper {
-  checkTaskExists(String title) {}
 }
 
 class HomeScreen extends StatefulWidget {
@@ -116,6 +148,8 @@ class HomeScreen extends StatefulWidget {
   final Function(int) deleteTask;
   final Function(int, String, String) updateTask;
   final VoidCallback toggleTheme;
+  final VoidCallback toggleNotifications;
+  final bool areNotificationsEnabled;
 
   HomeScreen({
     required this.insertTask,
@@ -124,6 +158,8 @@ class HomeScreen extends StatefulWidget {
     required this.deleteTask,
     required this.updateTask,
     required this.toggleTheme,
+    required this.toggleNotifications,
+    required this.areNotificationsEnabled,
   });
 
   @override
@@ -145,26 +181,27 @@ class _HomeScreenState extends State<HomeScreen> {
           itemCount: tasks.length,
           itemBuilder: (context, index) {
             final task = tasks[index];
-            return AnimatedCard(
+            return Card(
+              margin: EdgeInsets.all(8),
               child: ListTile(
-                title: Text(task['title'], style: TextStyle(fontWeight: FontWeight.bold)),
+                title: Text(task['title']),
                 subtitle: Text(task['description']),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.edit, color: Colors.amberAccent),
+                      icon: Icon(Icons.edit),
                       onPressed: () {
-                        // Add update task code
+                        // Call updateTask here
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.delete, color: Colors.redAccent),
+                      icon: Icon(Icons.delete),
                       onPressed: () => widget.deleteTask(task['id']),
                     ),
                     if (!completed)
                       IconButton(
-                        icon: Icon(Icons.check_circle, color: Colors.greenAccent),
+                        icon: Icon(Icons.check),
                         onPressed: () => widget.markTaskAsCompleted(task['id']),
                       ),
                   ],
@@ -188,7 +225,11 @@ class _HomeScreenState extends State<HomeScreen> {
       case 3:
         return _buildTaskList(false, true); // Repeated Tasks
       case 4:
-        return SettingsScreen(toggleTheme: widget.toggleTheme);
+        return SettingsScreen(
+          toggleTheme: widget.toggleTheme,
+          toggleNotifications: widget.toggleNotifications,
+          areNotificationsEnabled: widget.areNotificationsEnabled,
+        );
       default:
         return _buildTaskList(false, false);
     }
@@ -197,20 +238,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Task Manager", style: TextStyle(fontWeight: FontWeight.w500)),
-        backgroundColor: Colors.deepPurple[700],
-        actions: [
-          IconButton(
-            icon: Icon(Icons.brightness_6),
-            onPressed: widget.toggleTheme,
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: _buildBody(),
-      ),
+      appBar: AppBar(title: Text("Task Management App")),
+      body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
@@ -218,15 +247,11 @@ class _HomeScreenState extends State<HomeScreen> {
             _selectedIndex = index;
           });
         },
-        backgroundColor: Colors.deepPurple[50],
-        selectedItemColor: Colors.deepPurple,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: "Tasks"),
-          BottomNavigationBarItem(icon: Icon(Icons.add_task), label: "New Task"),
-          BottomNavigationBarItem(icon: Icon(Icons.done_all), label: "Completed"),
-          BottomNavigationBarItem(icon: Icon(Icons.repeat_on), label: "Repeats"),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.add), label: "Add Task"),
+          BottomNavigationBarItem(icon: Icon(Icons.check), label: "Completed"),
+          BottomNavigationBarItem(icon: Icon(Icons.repeat), label: "Repeated"),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
         ],
       ),
@@ -234,118 +259,87 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class AddTaskScreen extends StatefulWidget {
+class AddTaskScreen extends StatelessWidget {
   final Function(String, String, bool) onSubmit;
 
   AddTaskScreen({required this.onSubmit});
 
   @override
-  _AddTaskScreenState createState() => _AddTaskScreenState();
-}
-
-class _AddTaskScreenState extends State<AddTaskScreen> {
-  final titleController = TextEditingController();
-  final descriptionController = TextEditingController();
-  bool isRepeated = false;
-
-  @override
-  void dispose() {
-    titleController.dispose();
-    descriptionController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: 20),
-        TextField(
-          controller: titleController,
-          decoration: InputDecoration(
-            labelText: "Title",
-            prefixIcon: Icon(Icons.title),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+    final titleController = TextEditingController();
+    final descriptionController = TextEditingController();
+    bool isRepeated = false;
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          TextField(
+            controller: titleController,
+            decoration: InputDecoration(labelText: "Title"),
           ),
-        ),
-        SizedBox(height: 10),
-        TextField(
-          controller: descriptionController,
-          decoration: InputDecoration(
-            labelText: "Description",
-            prefixIcon: Icon(Icons.description),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          TextField(
+            controller: descriptionController,
+            decoration: InputDecoration(labelText: "Description"),
           ),
-        ),
-        SwitchListTile(
-          title: Text("Repeat Task"),
-          value: isRepeated,
-          onChanged: (value) {
-            setState(() {
+          SwitchListTile(
+            title: Text("Repeat Task"),
+            value: isRepeated,
+            onChanged: (value) {
               isRepeated = value;
-            });
-          },
-        ),
-        ElevatedButton(
-          onPressed: () {
-            widget.onSubmit(titleController.text, descriptionController.text, isRepeated);
-          },
-          child: Text("Add Task"),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.deepPurple[400],
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
-            ),
+            },
           ),
-        ),
-      ],
+          ElevatedButton(
+            onPressed: () {
+              onSubmit(
+                titleController.text,
+                descriptionController.text,
+                isRepeated,
+              );
+              Navigator.of(context).pop(); // Close the screen
+            },
+            child: Text("Add Task"),
+          ),
+        ],
+      ),
     );
   }
 }
 
 class SettingsScreen extends StatelessWidget {
   final VoidCallback toggleTheme;
+  final VoidCallback toggleNotifications;
+  final bool areNotificationsEnabled;
 
-  SettingsScreen({required this.toggleTheme});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: toggleTheme,
-        child: Text("Toggle Dark/Light Mode"),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.deepPurple[600],
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-      ),
-    );
-  }
-}
-
-class AnimatedCard extends StatelessWidget {
-  final Widget child;
-
-  AnimatedCard({required this.child});
+  SettingsScreen({
+    required this.toggleTheme,
+    required this.toggleNotifications,
+    required this.areNotificationsEnabled,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-      margin: EdgeInsets.symmetric(vertical: 5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade300,
-            blurRadius: 8,
-            offset: Offset(0, 4),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          Text("Settings", style: TextStyle(fontSize: 24)),
+          SwitchListTile(
+            title: Text("Dark Mode"),
+            onChanged: (value) {
+              toggleTheme();
+            },
+            value: Theme.of(context).brightness == Brightness.dark,
+          ),
+          SwitchListTile(
+            title: Text("Enable Notifications"),
+            onChanged: (value) {
+              toggleNotifications();
+            },
+            value: areNotificationsEnabled,
           ),
         ],
       ),
-      child: child,
     );
   }
 }
