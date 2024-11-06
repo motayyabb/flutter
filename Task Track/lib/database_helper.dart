@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'notification_helper.dart'; // Ensure this import is included
+import 'notification_helper.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -36,7 +36,6 @@ class DatabaseHelper {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
 
-    // Show notification when a new task is added
     final notificationHelper = NotificationHelper();
     await notificationHelper.showNotification('New Task Added', task['title']);
   }
@@ -59,35 +58,7 @@ class DatabaseHelper {
       whereArgs: [id],
     );
 
-    // Show notification when a task is completed
     final notificationHelper = NotificationHelper();
     await notificationHelper.showNotification('Task Completed', 'Task ID: $id has been completed.');
-  }
-
-  Future<void> deleteTask(int id) async {
-    final db = await database;
-    await db.delete(
-      'tasks',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-
-    // Show notification when a task is deleted
-    final notificationHelper = NotificationHelper();
-    await notificationHelper.showNotification('Task Deleted', 'Task ID: $id has been deleted.');
-  }
-
-  Future<void> updateTask(int id, String title, String description) async {
-    final db = await database;
-    await db.update(
-      'tasks',
-      {'title': title, 'description': description},
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-
-    // Show notification when a task is updated
-    final notificationHelper = NotificationHelper();
-    await notificationHelper.showNotification('Task Updated', 'Task ID: $id has been updated.');
   }
 }
