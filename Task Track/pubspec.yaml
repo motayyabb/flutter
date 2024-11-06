@@ -21,6 +21,7 @@ dependencies:
   provider: ^6.1.2  # For state management, if needed in the future (useful for managing dark mode state)
   permission_handler: ^10.2.0
   pdf: ^3.6.0
+  printing: ^5.5.0
 
 dev_dependencies:
   flutter_test:
