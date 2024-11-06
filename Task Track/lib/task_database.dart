@@ -43,6 +43,20 @@ class TaskDatabaseHelper {
     return result.map((map) => Task.fromMap(map)).toList();
   }
 
+  // Get only completed tasks
+  Future<List<Task>> getCompletedTasks() async {
+    final db = await instance.database;
+    final result = await db.query('tasks', where: 'isCompleted = ?', whereArgs: [1]);
+    return result.map((map) => Task.fromMap(map)).toList();
+  }
+
+  // Get only repeated tasks
+  Future<List<Task>> getRepeatedTasks() async {
+    final db = await instance.database;
+    final result = await db.query('tasks', where: 'isRepeated = ?', whereArgs: [1]);
+    return result.map((map) => Task.fromMap(map)).toList();
+  }
+
   Future<int> updateTask(Task task) async {
     final db = await instance.database;
     return await db.update('tasks', task.toMap(), where: 'id = ?', whereArgs: [task.id]);

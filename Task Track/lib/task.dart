@@ -3,14 +3,14 @@ class Task {
   String name;
   String description;
   bool isCompleted;
-  bool isRepeated; // Added repeat flag
+  bool isRepeated; // New field for repeated tasks
 
   Task({
     this.id,
     required this.name,
     required this.description,
     this.isCompleted = false,
-    this.isRepeated = false, // Default is false
+    this.isRepeated = false, // Default to false
   });
 
   // Convert Task object to Map
@@ -20,7 +20,7 @@ class Task {
       'name': name,
       'description': description,
       'isCompleted': isCompleted ? 1 : 0, // Store as 1 for true, 0 for false
-      'isRepeated': isRepeated ? 1 : 0,   // Store repeat flag
+      'isRepeated': isRepeated ? 1 : 0, // Store as 1 for true, 0 for false
     };
   }
 
