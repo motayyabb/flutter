@@ -1,11 +1,11 @@
-# TaskTrack
+# TaskTrack - Task Management Mobile App
 
-## Overview
 **TaskTrack** is a task management mobile application built with **Flutter**. This app helps users manage their tasks efficiently by providing features such as adding, editing, deleting, marking tasks as completed, generating PDF reports, and receiving notifications. It also supports theme customization (dark/light mode) and integrates local storage (SQLite) to save task data.
 
 ---
 
 ## Features
+
 - **Home Screen**: View all tasks and interact with each one (edit, delete, mark as completed).
 - **Add Task Screen**: Add new tasks with a title, description, and due date.
 - **Edit Task Screen**: Modify details of an existing task.
@@ -41,10 +41,12 @@ Here are screenshots of the key screens in the app:
    ![Settings Screen](assets/screenshots/settings_screen.png)
 
 ---
+## Video Demo
 
 ## Installation Instructions
 
 ### Prerequisites
+
 To run this app, you need the following:
 - **Flutter SDK**: [Install Flutter](https://flutter.dev/docs/get-started/install)
 - **Dart SDK**: Included with the Flutter installation.
@@ -54,6 +56,7 @@ To run this app, you need the following:
 ### Steps to Run the App
 
 1. **Clone the Repository**
+
    Clone the project to your local machine:
    ```bash
-   git clone https://github.com/yourusername/tasktrack.git
+   git clone https://github.com/motayyabb/tasktrack.git
