@@ -20,14 +20,12 @@
 
 Here are screenshots of the key screens in the app:
 
-| **Screen**               | **Screenshot**                           |
-|--------------------------|------------------------------------------|
-| **Home Screen**           | <img src="https://github.com/user-attachments/assets/e4de2584-ee36-433f-b90b-fed06637ad3a" width="150" height="150"> |
-| **Add Task Screen**       | <img src="https://github.com/user-attachments/assets/e3aff5e3-82d6-4672-b05b-5d4cc08627d4" width="150" height="150"> |
-| **Completed Tasks Screen**| <img src="https://github.com/user-attachments/assets/56b5edc8-dbb8-4220-86f3-39a9ba6b9cca" width="150" height="150"> |
-| **Edit Task Screen**      | <img src="https://github.com/user-attachments/assets/c012d2de-86be-4b2c-ad5d-903860210bcd" width="150" height="150"> |
-| **Settings Screen**       | <img src="https://github.com/user-attachments/assets/b4f059e8-1841-49fb-b9d8-d54f8d994d7d" width="150" height="150"> |
-| **Notification**          | <img src="https://github.com/user-attachments/assets/98235a5f-1d28-41b4-99e8-71221e7023be" width="150" height="150"> |
+| **Screen**               | **Screenshot**                           | **Screen**               | **Screenshot**                           |
+|--------------------------|------------------------------------------|--------------------------|------------------------------------------|
+| **Home Screen**           | <img src="https://github.com/user-attachments/assets/e4de2584-ee36-433f-b90b-fed06637ad3a" width="200" height="200"> | **Add Task Screen**       | <img src="https://github.com/user-attachments/assets/e3aff5e3-82d6-4672-b05b-5d4cc08627d4" width="200" height="200"> |
+| **Completed Tasks Screen**| <img src="https://github.com/user-attachments/assets/56b5edc8-dbb8-4220-86f3-39a9ba6b9cca" width="200" height="200"> | **Edit Task Screen**      | <img src="https://github.com/user-attachments/assets/c012d2de-86be-4b2c-ad5d-903860210bcd" width="200" height="200"> |
+| **Settings Screen**       | <img src="https://github.com/user-attachments/assets/b4f059e8-1841-49fb-b9d8-d54f8d994d7d" width="200" height="200"> | **Notification**          | <img src="https://github.com/user-attachments/assets/98235a5f-1d28-41b4-99e8-71221e7023be" width="200" height="200"> |
+
 
 
 ---
