@@ -20,6 +20,7 @@ dependencies:
   flutter_local_notifications: ^17.2.4 # For local notifications
   provider: ^6.1.2  # For state management, if needed in the future (useful for managing dark mode state)
   permission_handler: ^10.2.0
+  pdf: ^3.6.0
 
 dev_dependencies:
   flutter_test:

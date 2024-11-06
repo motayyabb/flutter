@@ -3,6 +3,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'task_database.dart';
 import 'task.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 void main() {
   runApp(MyApp());
@@ -251,9 +254,57 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Future<void> _generateAndPrintPDF(List<Task> tasks) async {
+    final pdf = pw.Document();
+
+    pdf.addPage(pw.Page(
+      build: (pw.Context context) {
+        return pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            pw.Text("Task List", style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
+            pw.SizedBox(height: 20),
+            ...tasks.map((task) {
+              return pw.Padding(
+                padding: pw.EdgeInsets.only(bottom: 10),
+                child: pw.Text(
+                  "${task.name}: ${task.description}",
+                  style: pw.TextStyle(fontSize: 18),
+                ),
+              );
+            }).toList(),
+          ],
+        );
+      },
+    ));
+
+    await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => pdf.save());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Task Management',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
+        backgroundColor: Colors.blueAccent,
+        elevation: 5.0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.print, size: 30.0),
+            onPressed: () async {
+              // Fetch the tasks currently displayed on the screen
+              var tasks = await TaskDatabaseHelper.instance.getTasks();
+              // Filter tasks based on the current screen's state, e.g., only display incomplete tasks
+              var displayedTasks = tasks.where((task) => !task.isCompleted).toList();
+              // Generate and print the PDF for the displayed tasks
+              _generateAndPrintPDF(displayedTasks);
+            },
+          ),
+        ],
+      ),
       body: FutureBuilder<List<Task>>(
         future: TaskDatabaseHelper.instance.getTasks(),
         builder: (context, snapshot) {
@@ -323,6 +374,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
 
 
 // AddTaskScreen - Add a new task
