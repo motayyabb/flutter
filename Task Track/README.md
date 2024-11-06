@@ -31,6 +31,8 @@ Here are screenshots of the key screens in the app:
 
 ---
 ## Video Demo
+![1000098246](https://github.com/user-attachments/assets/10f2fe03-2309-40b6-a9e8-4f4378779917)
+
 
 ## Installation Instructions
 
