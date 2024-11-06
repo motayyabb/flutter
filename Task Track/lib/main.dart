@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'task_database.dart';
 import 'task.dart';
 
@@ -25,13 +26,32 @@ class _MyAppState extends State<MyApp> {
     _initializeNotifications();
   }
 
-  void _initializeNotifications() async {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('app_icon');
-    const InitializationSettings initializationSettings =
-    InitializationSettings(android: initializationSettingsAndroid);
+  // Request notification permission
+  Future<void> _requestPermissions() async {
+    PermissionStatus status = await Permission.notification.request();
+    if (status.isGranted) {
+      print("Notification permission granted");
+    } else {
+      print("Notification permission denied");
+    }
+  }
 
+  void _initializeNotifications() async {
+    // Request permissions before initializing
+    await _requestPermissions();
+
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('app_icon'); // Ensure app_icon exists in drawable folder
+    final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+
+    bool? initialized = await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    if (initialized == null || !initialized) {
+      print("Notification initialization failed.");
+    } else {
+      print("Notification initialized successfully.");
+    }
   }
 
   Future<void> _showNotification(String title, String body) async {
@@ -51,8 +71,8 @@ class _MyAppState extends State<MyApp> {
         htmlFormatContentTitle: true,
       ),
       color: Colors.blueAccent,
-      largeIcon: DrawableResourceAndroidBitmap('app_icon'),
-      icon: 'app_icon',
+      largeIcon: DrawableResourceAndroidBitmap('app_icon'),  // Correct reference to the drawable icon
+      icon: 'app_icon',  // Set the small icon in the notification (also from the drawable folder)
     );
 
     NotificationDetails generalNotificationDetails = NotificationDetails(android: androidDetails);
@@ -65,8 +85,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-
-
   void _onItemTapped(int index) {
     setState(() {
       _currentIndex = index;
@@ -78,6 +96,8 @@ class _MyAppState extends State<MyApp> {
     List<Widget> _screens = [
       HomeScreen(notificationCallback: _showNotification),
       AddTaskScreen(notificationCallback: _showNotification),
+      CompletedTasksScreen(),
+      RepeatedTasksScreen(),
       SettingsScreen(
         onDarkModeToggle: (bool value) {
           setState(() {
@@ -116,9 +136,18 @@ class _MyAppState extends State<MyApp> {
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: _onItemTapped,
+          backgroundColor: Colors.blue,  // Blue background
+          selectedItemColor: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white  // White text in dark mode
+              : Colors.black, // Black text in light mode
+          unselectedItemColor: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white70  // Lighter white in dark mode
+              : Colors.black54, // Lighter black in light mode
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add Task'),
+            BottomNavigationBarItem(icon: Icon(Icons.check), label: 'Completed'),
+            BottomNavigationBarItem(icon: Icon(Icons.repeat), label: 'Repeated'),
             BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
           ],
         ),
@@ -126,7 +155,91 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+// CompletedTasksScreen - Displays all completed tasks
+class CompletedTasksScreen extends StatefulWidget {
+  @override
+  _CompletedTasksScreenState createState() => _CompletedTasksScreenState();
+}
 
+class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Completed Tasks')),
+      body: FutureBuilder<List<Task>>(
+        future: TaskDatabaseHelper.instance.getTasks(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No completed tasks found.'));
+          }
+
+          var tasks = snapshot.data!.where((task) => task.isCompleted).toList();
+          return ListView.builder(
+            itemCount: tasks.length,
+            itemBuilder: (context, index) {
+              final task = tasks[index];
+              return Card(
+                elevation: 8,
+                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                child: ListTile(
+                  title: Text(task.name, style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text(task.description),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+// RepeatedTasksScreen - Displays tasks that have been inserted with the same name
+class RepeatedTasksScreen extends StatefulWidget {
+  @override
+  _RepeatedTasksScreenState createState() => _RepeatedTasksScreenState();
+}
+
+class _RepeatedTasksScreenState extends State<RepeatedTasksScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Repeated Tasks')),
+      body: FutureBuilder<List<Task>>(
+        future: TaskDatabaseHelper.instance.getTasks(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No repeated tasks found.'));
+          }
+
+          var tasks = snapshot.data!;
+          var repeatedTasks = tasks.where((task) => tasks.where((t) => t.name == task.name).length > 1).toList();
+
+          return ListView.builder(
+            itemCount: repeatedTasks.length,
+            itemBuilder: (context, index) {
+              final task = repeatedTasks[index];
+              return Card(
+                elevation: 8,
+                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                child: ListTile(
+                  title: Text(task.name, style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text(task.description),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
 // HomeScreen - Displays all tasks
 class HomeScreen extends StatefulWidget {
   final Future<void> Function(String, String) notificationCallback;
@@ -211,6 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+
 // AddTaskScreen - Add a new task
 class AddTaskScreen extends StatefulWidget {
   final Future<void> Function(String, String) notificationCallback;
@@ -242,20 +356,31 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       bool taskExists = existingTasks.any((task) => task.name == taskName);
 
       if (taskExists) {
-        widget.notificationCallback("Task Added", "The task '${taskName}' was added successfully.");
+        widget.notificationCallback("Task Exists", "The task '${taskName}' already exists.");
         return;
       }
 
+      // Create new task object
       Task task = Task(
         name: taskName,
         description: _descriptionController.text,
       );
 
+      // Insert task into the database
       await TaskDatabaseHelper.instance.insertTask(task);
+
+      // Trigger the notification after the task is added
       widget.notificationCallback("New Task Added", "The task '$taskName' has been added.");
 
-      setState(() {});  // Ensure the UI updates after adding the task
-      Navigator.pop(context);  // Navigate back after the task is added
+      // Trigger a state update to refresh the UI (in the parent screen)
+      setState(() {
+        // Any state change to trigger UI rebuild
+      });
+
+      // Navigate back after the task is added
+      Navigator.pop(context);
+
+      // Optionally, show a Snackbar to confirm task addition
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Task added')));
     }
   }

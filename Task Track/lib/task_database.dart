@@ -21,7 +21,7 @@ class TaskDatabaseHelper {
   }
 
   Future _createDB(Database db, int version) async {
-    await db.execute(''' 
+    await db.execute('''
       CREATE TABLE tasks(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
@@ -50,5 +50,20 @@ class TaskDatabaseHelper {
   Future<int> deleteTask(int id) async {
     final db = await instance.database;
     return await db.delete('tasks', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<List<Task>> getRepeatedTasks() async {
+    final db = await instance.database;
+    final result = await db.rawQuery('''
+      SELECT * FROM tasks
+      WHERE name IN (SELECT name FROM tasks GROUP BY name HAVING COUNT(name) > 1)
+    ''');
+    return result.map((map) => Task.fromMap(map)).toList();
+  }
+
+  Future<List<Task>> getCompletedTasks() async {
+    final db = await instance.database;
+    final result = await db.query('tasks', where: 'isCompleted = ?', whereArgs: [1]);
+    return result.map((map) => Task.fromMap(map)).toList();
   }
 }

@@ -19,6 +19,7 @@ dependencies:
   carousel_slider: ^4.0.0  # For carousel widget (null-safe version)
   flutter_local_notifications: ^17.2.4 # For local notifications
   provider: ^6.1.2  # For state management, if needed in the future (useful for managing dark mode state)
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:
@@ -27,3 +28,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - images/icon.png
