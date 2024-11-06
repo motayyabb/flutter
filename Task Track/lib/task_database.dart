@@ -26,8 +26,7 @@ class TaskDatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         description TEXT,
-        isCompleted INTEGER,
-        isRepeated INTEGER
+        isCompleted INTEGER
       )
     ''');
   }
@@ -40,20 +39,6 @@ class TaskDatabaseHelper {
   Future<List<Task>> getTasks() async {
     final db = await instance.database;
     final result = await db.query('tasks');
-    return result.map((map) => Task.fromMap(map)).toList();
-  }
-
-  // Get only completed tasks
-  Future<List<Task>> getCompletedTasks() async {
-    final db = await instance.database;
-    final result = await db.query('tasks', where: 'isCompleted = ?', whereArgs: [1]);
-    return result.map((map) => Task.fromMap(map)).toList();
-  }
-
-  // Get only repeated tasks
-  Future<List<Task>> getRepeatedTasks() async {
-    final db = await instance.database;
-    final result = await db.query('tasks', where: 'isRepeated = ?', whereArgs: [1]);
     return result.map((map) => Task.fromMap(map)).toList();
   }
 

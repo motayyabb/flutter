@@ -3,14 +3,12 @@ class Task {
   String name;
   String description;
   bool isCompleted;
-  bool isRepeated; // New field for repeated tasks
 
   Task({
     this.id,
     required this.name,
     required this.description,
     this.isCompleted = false,
-    this.isRepeated = false, // Default to false
   });
 
   // Convert Task object to Map
@@ -20,7 +18,6 @@ class Task {
       'name': name,
       'description': description,
       'isCompleted': isCompleted ? 1 : 0, // Store as 1 for true, 0 for false
-      'isRepeated': isRepeated ? 1 : 0, // Store as 1 for true, 0 for false
     };
   }
 
@@ -31,7 +28,6 @@ class Task {
       name: map['name'],
       description: map['description'],
       isCompleted: map['isCompleted'] == 1, // Convert from int to bool
-      isRepeated: map['isRepeated'] == 1,   // Convert from int to bool
     );
   }
 }
