@@ -22,33 +22,28 @@ Here are screenshots of the key screens in the app:
 
 ### 1. **Home Screen**
    View and manage your task list.
-   ![Home Screen](![1000098235](https://github.com/user-attachments/assets/e4de2584-ee36-433f-b90b-fed06637ad3a)
-)
+   ![Home Screen](https://github.com/user-attachments/assets/e4de2584-ee36-433f-b90b-fed06637ad3a)
 
 ### 2. **Add Task Screen**
    Add new tasks to your task list.
-   ![Add Task Screen](![1000098241](https://github.com/user-attachments/assets/e3aff5e3-82d6-4672-b05b-5d4cc08627d4)
-)
+   ![Add Task Screen](https://github.com/user-attachments/assets/e3aff5e3-82d6-4672-b05b-5d4cc08627d4)
 
 ### 3. **Completed Tasks Screen**
    View tasks that are marked as completed.
-   ![Completed Tasks Screen](![1000098236](https://github.com/user-attachments/assets/56b5edc8-dbb8-4220-86f3-39a9ba6b9cca)
-)
+   ![Completed Tasks Screen](https://github.com/user-attachments/assets/56b5edc8-dbb8-4220-86f3-39a9ba6b9cca)
 
 ### 4. **Edit Task Screen**
    Edit the details of an existing task.
-   ![Edit Task Screen](![1000098242](https://github.com/user-attachments/assets/c012d2de-86be-4b2c-ad5d-903860210bcd)
-)
+   ![Edit Task Screen](https://github.com/user-attachments/assets/c012d2de-86be-4b2c-ad5d-903860210bcd)
 
 ### 5. **Settings Screen**
    Change app settings such as theme and notifications.
-   ![Settings Screen](![1000098238](https://github.com/user-attachments/assets/b4f059e8-1841-49fb-b9d8-d54f8d994d7d)
-)
+   ![Settings Screen](https://github.com/user-attachments/assets/b4f059e8-1841-49fb-b9d8-d54f8d994d7d)
+
 ### 6. **Notification**
-   Notification on mobile screen .
-   ![Screen](![1000098223](https://github.com/user-attachments/assets/98235a5f-1d28-41b4-99e8-71221e7023be)
-)
-)
+   Notification on mobile screen.
+   ![Notification](https://github.com/user-attachments/assets/98235a5f-1d28-41b4-99e8-71221e7023be)
+
 ---
 ## Video Demo
 
