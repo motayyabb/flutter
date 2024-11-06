@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'task_database.dart';
 import 'task.dart';
-import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +15,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   bool isDarkMode = false;
-  bool areNotificationsEnabled = true;  // Track notification status
+  bool areNotificationsEnabled = true;
 
   int _currentIndex = 0;
 
@@ -32,8 +31,8 @@ class _MyAppState extends State<MyApp> {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  Future<void> _showNotification(String taskName) async {
-    if (!areNotificationsEnabled) return;  // Check if notifications are enabled
+  Future<void> _showNotification(String title, String body) async {
+    if (!areNotificationsEnabled) return;
 
     var androidDetails = AndroidNotificationDetails(
         'channel_id', 'channel_name', importance: Importance.high, priority: Priority.high);
@@ -41,23 +40,8 @@ class _MyAppState extends State<MyApp> {
 
     await flutterLocalNotificationsPlugin.show(
       0,
-      'New Task Added',
-      'You added a new task: $taskName',
-      generalNotificationDetails,
-    );
-  }
-
-  Future<void> _showRepeatedNotification(String taskName) async {
-    if (!areNotificationsEnabled) return;  // Check if notifications are enabled
-
-    var androidDetails = AndroidNotificationDetails(
-        'repeated_task_id', 'repeated_task_name', importance: Importance.high, priority: Priority.high);
-    var generalNotificationDetails = NotificationDetails(android: androidDetails);
-
-    await flutterLocalNotificationsPlugin.show(
-      1,
-      'Repeated Task',
-      'This task repeats. Check your repeated tasks list.',
+      title,
+      body,
       generalNotificationDetails,
     );
   }
@@ -73,7 +57,6 @@ class _MyAppState extends State<MyApp> {
     List<Widget> _screens = [
       HomeScreen(notificationCallback: _showNotification),
       AddTaskScreen(notificationCallback: _showNotification),
-      RepeatedTaskScreen(notificationCallback: _showRepeatedNotification),
       SettingsScreen(
         onDarkModeToggle: (bool value) {
           setState(() {
@@ -95,10 +78,15 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Task Management'),
+          title: Text(
+            'Task Management',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+          backgroundColor: Colors.blueAccent,
+          elevation: 5.0,
           actions: [
             IconButton(
-              icon: Icon(Icons.notifications),
+              icon: Icon(Icons.notifications, size: 30.0),
               onPressed: () {},
             ),
           ],
@@ -110,7 +98,6 @@ class _MyAppState extends State<MyApp> {
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add Task'),
-            BottomNavigationBarItem(icon: Icon(Icons.repeat), label: 'Repeated Tasks'),
             BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
           ],
         ),
@@ -119,11 +106,20 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  final Future<void> Function(String) notificationCallback;
+// Remaining classes for HomeScreen, AddTaskScreen, EditTaskScreen, and SettingsScreen
+// as defined in the previous response, with automatic refresh on adding/editing tasks.
+
+
+class HomeScreen extends StatefulWidget {
+  final Future<void> Function(String, String) notificationCallback;
 
   HomeScreen({required this.notificationCallback});
 
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,13 +138,15 @@ class HomeScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final task = tasks[index];
               return Card(
-                elevation: 5,
+                elevation: 8,
                 margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                 child: ListTile(
                   title: Text(
                     task.name,
                     style: TextStyle(
                       decoration: task.isCompleted ? TextDecoration.lineThrough : TextDecoration.none,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   subtitle: Text(task.description),
@@ -163,14 +161,15 @@ class HomeScreen extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (context) => EditTaskScreen(task: task),
                             ),
-                          );
+                          ).then((_) => setState(() {}));
                         },
                       ),
                       IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () async {
                           await TaskDatabaseHelper.instance.deleteTask(task.id!);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Task deleted')));
+                          setState(() {});
+                          widget.notificationCallback("Task Deleted", "${task.name} has been deleted.");
                         },
                       ),
                       IconButton(
@@ -178,8 +177,8 @@ class HomeScreen extends StatelessWidget {
                         onPressed: () async {
                           task.isCompleted = true;
                           await TaskDatabaseHelper.instance.updateTask(task);
-                          notificationCallback(task.name);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Task marked as completed')));
+                          setState(() {});
+                          widget.notificationCallback("Task Completed", "${task.name} is marked as completed.");
                         },
                       ),
                     ],
@@ -195,7 +194,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 class AddTaskScreen extends StatefulWidget {
-  final Future<void> Function(String) notificationCallback;
+  final Future<void> Function(String, String) notificationCallback;
 
   AddTaskScreen({required this.notificationCallback});
 
@@ -223,8 +222,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       );
 
       await TaskDatabaseHelper.instance.insertTask(task);
-      widget.notificationCallback(task.name);
-      Navigator.pop(context);  // Go back to the previous screen
+      widget.notificationCallback("New Task Added", "${task.name} has been added.");
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Task added')));
     }
   }
@@ -262,7 +261,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _addTask,
-                child: Text('Add Task'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                ),
+                child: Text(
+                  'Add Task',
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
             ],
           ),
@@ -272,10 +279,25 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   }
 }
 
-class EditTaskScreen extends StatelessWidget {
+class EditTaskScreen extends StatefulWidget {
   final Task task;
 
   EditTaskScreen({required this.task});
+
+  @override
+  _EditTaskScreenState createState() => _EditTaskScreenState();
+}
+
+class _EditTaskScreenState extends State<EditTaskScreen> {
+  late TextEditingController _nameController;
+  late TextEditingController _descriptionController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: widget.task.name);
+    _descriptionController = TextEditingController(text: widget.task.description);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -286,23 +308,23 @@ class EditTaskScreen extends StatelessWidget {
         child: Column(
           children: [
             TextFormField(
-              initialValue: task.name,
+              controller: _nameController,
               decoration: InputDecoration(labelText: 'Task Name'),
-              onChanged: (value) => task.name = value,
             ),
             TextFormField(
-              initialValue: task.description,
+              controller: _descriptionController,
               decoration: InputDecoration(labelText: 'Task Description'),
-              onChanged: (value) => task.description = value,
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                await TaskDatabaseHelper.instance.updateTask(task);
+                widget.task.name = _nameController.text;
+                widget.task.description = _descriptionController.text;
+                await TaskDatabaseHelper.instance.updateTask(widget.task);
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Task updated')));
               },
-              child: Text('Update Task'),
+              child: Text('Save Changes'),
             ),
           ],
         ),
@@ -311,20 +333,9 @@ class EditTaskScreen extends StatelessWidget {
   }
 }
 
-class RepeatedTaskScreen extends StatelessWidget {
-  final Future<void> Function(String) notificationCallback;
-
-  RepeatedTaskScreen({required this.notificationCallback});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('No repeated tasks for now.'));
-  }
-}
-
 class SettingsScreen extends StatelessWidget {
-  final ValueChanged<bool> onDarkModeToggle;
-  final ValueChanged<bool> onNotificationToggle;
+  final Function(bool) onDarkModeToggle;
+  final Function(bool) onNotificationToggle;
   final bool isDarkMode;
   final bool areNotificationsEnabled;
 
@@ -337,25 +348,20 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Settings')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            SwitchListTile(
-              title: Text('Dark Mode'),
-              value: isDarkMode,
-              onChanged: onDarkModeToggle,
-            ),
-            SwitchListTile(
-              title: Text('Enable Notifications'),
-              value: areNotificationsEnabled,
-              onChanged: onNotificationToggle,
-            ),
-          ],
+    return ListView(
+      padding: EdgeInsets.all(16.0),
+      children: [
+        SwitchListTile(
+          title: Text('Dark Mode'),
+          value: isDarkMode,
+          onChanged: onDarkModeToggle,
         ),
-      ),
+        SwitchListTile(
+          title: Text('Enable Notifications'),
+          value: areNotificationsEnabled,
+          onChanged: onNotificationToggle,
+        ),
+      ],
     );
   }
 }
