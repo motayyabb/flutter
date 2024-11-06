@@ -26,7 +26,8 @@ class TaskDatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         description TEXT,
-        isCompleted INTEGER
+        isCompleted INTEGER,
+        isRepeated INTEGER
       )
     ''');
   }

@@ -59,6 +59,8 @@ class _MyAppState extends State<MyApp> {
     List<Widget> _screens = [
       HomeScreen(notificationCallback: _showNotification),
       AddTaskScreen(notificationCallback: _showNotification),
+      CompletedTasksScreen(notificationCallback: _showNotification),
+      RepeatedTasksScreen(notificationCallback: _showNotification),
       SettingsScreen(
         onDarkModeToggle: (bool value) {
           setState(() {
@@ -94,8 +96,13 @@ class _MyAppState extends State<MyApp> {
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add Task'),
+            BottomNavigationBarItem(icon: Icon(Icons.check), label: 'Completed Tasks'),
+            BottomNavigationBarItem(icon: Icon(Icons.repeat), label: 'Repeated Tasks'),
             BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
           ],
+          selectedItemColor: Colors.white, // White text for selected item
+          unselectedItemColor: Colors.blueAccent, // Blue accent for unselected items
+          backgroundColor: Colors.blueAccent, // Blue accent background
         ),
       ),
     );
@@ -181,6 +188,100 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+// CompletedTasksScreen - Displays completed tasks
+class CompletedTasksScreen extends StatelessWidget {
+  final Future<void> Function(String, String) notificationCallback;
+
+  CompletedTasksScreen({required this.notificationCallback});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: FutureBuilder<List<Task>>(
+        future: TaskDatabaseHelper.instance.getTasks(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No completed tasks found.'));
+          }
+
+          var tasks = snapshot.data!.where((task) => task.isCompleted).toList();
+          return ListView.builder(
+            itemCount: tasks.length,
+            itemBuilder: (context, index) {
+              final task = tasks[index];
+              return Card(
+                elevation: 8,
+                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                child: ListTile(
+                  title: Text(
+                    task.name,
+                    style: TextStyle(
+                      decoration: task.isCompleted ? TextDecoration.lineThrough : TextDecoration.none,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(task.description),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+// RepeatedTasksScreen - Displays repeated tasks
+class RepeatedTasksScreen extends StatelessWidget {
+  final Future<void> Function(String, String) notificationCallback;
+
+  RepeatedTasksScreen({required this.notificationCallback});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: FutureBuilder<List<Task>>(
+        future: TaskDatabaseHelper.instance.getTasks(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No repeated tasks found.'));
+          }
+
+          var tasks = snapshot.data!;
+          return ListView.builder(
+            itemCount: tasks.length,
+            itemBuilder: (context, index) {
+              final task = tasks[index];
+              if (task.name.contains("Repeat")) { // Assuming repeated tasks have "Repeat" in their name
+                return Card(
+                  elevation: 8,
+                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                  child: ListTile(
+                    title: Text(
+                      task.name,
+                      style: TextStyle(
+                        decoration: task.isCompleted ? TextDecoration.lineThrough : TextDecoration.none,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Text(task.description),
+                  ),
+                );
+              }
+              return Container(); // For non-repeated tasks
+            },
+          );
+        },
+      ),
+    );
+  }
+}
 // AddTaskScreen - Add a new task
 class AddTaskScreen extends StatefulWidget {
   final Future<void> Function(String, String) notificationCallback;
