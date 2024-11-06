@@ -25,6 +25,8 @@ Here are screenshots of the key screens in the app:
 | **Home Screen**           | <img src="https://github.com/user-attachments/assets/e4de2584-ee36-433f-b90b-fed06637ad3a" width="48%"> | **Add Task Screen**       | <img src="https://github.com/user-attachments/assets/e3aff5e3-82d6-4672-b05b-5d4cc08627d4" width="48%"> |
 | **Completed Tasks Screen**| <img src="https://github.com/user-attachments/assets/56b5edc8-dbb8-4220-86f3-39a9ba6b9cca" width="48%"> | **Edit Task Screen**      | <img src="https://github.com/user-attachments/assets/c012d2de-86be-4b2c-ad5d-903860210bcd" width="48%"> |
 | **Settings Screen**       | <img src="https://github.com/user-attachments/assets/b4f059e8-1841-49fb-b9d8-d54f8d994d7d" width="48%"> | **Notification**          | <img src="https://github.com/user-attachments/assets/98235a5f-1d28-41b4-99e8-71221e7023be" width="48%"> |
+| **Enable Notification Option**       | <img src="https://github.com/user-attachments/assets/b4f059e8-1841-49fb-b9d8-d54f8d994d7d" width="48%"> | **PDf saver**          | <img src="https://github.com/user-attachments/assets/98235a5f-1d28-41b4-99e8-71221e7023be" width="48%"> |
+| **Repeated notification**       | <img src="https://github.com/user-attachments/assets/b4f059e8-1841-49fb-b9d8-d54f8d994d7d" width="48%"> | **APP ICON**          | <img src="https://github.com/user-attachments/assets/98235a5f-1d28-41b4-99e8-71221e7023be" width="48%"> |
 
 
 
