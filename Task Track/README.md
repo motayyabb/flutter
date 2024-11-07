@@ -30,7 +30,7 @@
 ---
 ## Video Demo
 ![1000098246](https://github.com/user-attachments/assets/10f2fe03-2309-40b6-a9e8-4f4378779917)
-
+---
 ## Dependencies
 
 This project uses the following dependencies:
@@ -63,6 +63,7 @@ dependencies:
   permission_handler: ^10.2.0
   pdf: ^3.6.0
   printing: ^5.5.0
+---
 ## Installation Instructions
 
 ### Prerequisites
