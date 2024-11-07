@@ -16,22 +16,13 @@
 
 ---
 
-## Screenshots
-
-Here are screenshots of the key screens in the app:
-
 | **Screen**               | **Screenshot**                             | **Screen**               | **Screenshot**                             |
 |--------------------------|--------------------------------------------|--------------------------|--------------------------------------------|
-| **Home Screen**           | <img src="https://github.com/user-attachments/assets/e4de2584-ee36-433f-b90b-fed06637ad3a" width="48%"> | **Add Task Screen**       | <img src="https://github.com/user-attachments/assets/e3aff5e3-82d6-4672-b05b-5d4cc08627d4" width="48%"> |
-| **Completed Tasks Screen**| <img src="https://github.com/user-attachments/assets/56b5edc8-dbb8-4220-86f3-39a9ba6b9cca" width="48%"> | **Edit Task Screen**      | <img src="https://github.com/user-attachments/assets/c012d2de-86be-4b2c-ad5d-903860210bcd" width="48%"> |
-| **Settings Screen**       | <img src="https://github.com/user-attachments/assets/b4f059e8-1841-49fb-b9d8-d54f8d994d7d" width="48%"> | **Notification**          | <img src="https://github.com/user-attachments/assets/98235a5f-1d28-41b4-99e8-71221e7023be" width="48%"> |
-| **Enable Notification Option**       | <img src="
-                                           ![1000098252](https://github.com/user-attachments/assets/e349f39a-d70c-4c6b-9894-2202b0a2bd2b)
-" width="48%"> | **PDf saver**          | <img src="![1000098247](https://github.com/user-attachments/assets/0de54f23-fb9a-41d3-bae0-d5fcfababf3f)
-" width="48%"> |
-| **Repeated notification**       | <img src="https://github.com/user-attachments/assets/b4f059e8-1841-49fb-b9d8-d54f8d994d7d" width="48%"> | **APP ICON**          | <img src="![1000098248](![1000098253](https://github.com/user-attachments/assets/7cb03386-3a74-445c-b2d1-14b28fd05a89)
-)
-" width="48%"> |
+| **Home Screen**           | ![Home Screen](https://github.com/user-attachments/assets/e4de2584-ee36-433f-b90b-fed06637ad3a) | **Add Task Screen**       | ![Add Task Screen](https://github.com/user-attachments/assets/e3aff5e3-82d6-4672-b05b-5d4cc08627d4) |
+| **Completed Tasks Screen**| ![Completed Tasks Screen](https://github.com/user-attachments/assets/56b5edc8-dbb8-4220-86f3-39a9ba6b9cca) | **Edit Task Screen**      | ![Edit Task Screen](https://github.com/user-attachments/assets/c012d2de-86be-4b2c-ad5d-903860210bcd) |
+| **Settings Screen**       | ![Settings Screen](https://github.com/user-attachments/assets/b4f059e8-1841-49fb-b9d8-d54f8d994d7d) | **Notification Settings** | ![Notification Settings](https://github.com/user-attachments/assets/98235a5f-1d28-41b4-99e8-71221e7023be) |
+| **Enable Notifications**  | ![Enable Notifications](https://github.com/user-attachments/assets/e349f39a-d70c-4c6b-9894-2202b0a2bd2b) | **PDF Saver**            | ![PDF Saver](https://github.com/user-attachments/assets/0de54f23-fb9a-41d3-bae0-d5fcfababf3f) |
+
 
 
 
