@@ -35,7 +35,38 @@ Here are screenshots of the key screens in the app:
 ## Video Demo
 ![1000098246](https://github.com/user-attachments/assets/10f2fe03-2309-40b6-a9e8-4f4378779917)
 
+## Dependencies
 
+This project uses the following dependencies:
+
+- **flutter**: SDK for building cross-platform mobile apps.
+- **sqflite**: SQLite database management for local data storage (null-safe version).
+- **path_provider**: Helps to retrieve the correct file path for storing SQLite databases.
+- **flutter_spinkit**: Spinner animations for loading indicators (check if null-safe).
+- **cupertino_icons**: Provides Cupertino (iOS-style) icons for the app.
+- **carousel_slider**: Used for carousel widgets (null-safe version).
+- **flutter_local_notifications**: Allows for local notifications to notify the user of tasks and reminders.
+- **provider**: State management solution for managing state throughout the app (e.g., dark mode).
+- **permission_handler**: Manages app permissions for tasks like notifications and storage access.
+- **pdf**: Provides PDF generation capabilities for tasks and reports.
+- **printing**: Used to print the generated PDFs.
+
+### Example `pubspec.yaml`
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  sqflite: ^2.4.0  # SQLite for database management (null-safe version)
+  path_provider: ^2.1.5  # To get the correct path for storing the SQLite file
+  flutter_spinkit: ^5.1.0  # Spinner animations (check if null-safe)
+  cupertino_icons: ^1.0.0  # Cupertino icons for iOS-like design
+  carousel_slider: ^4.0.0  # For carousel widget (null-safe version)
+  flutter_local_notifications: ^17.2.4 # For local notifications
+  provider: ^6.1.2  # For state management, if needed in the future (useful for managing dark mode state)
+  permission_handler: ^10.2.0
+  pdf: ^3.6.0
+  printing: ^5.5.0
 ## Installation Instructions
 
 ### Prerequisites
