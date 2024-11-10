@@ -22,7 +22,10 @@ dependencies:
   permission_handler: ^10.2.0
   pdf: ^3.6.0
   printing: ^5.5.0
-
+  timezone: ^0.9.4
+  percent_indicator: ^4.0.0
+  fl_chart: ^0.35.0
+  font_awesome_flutter: ^10.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

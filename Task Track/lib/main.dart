@@ -130,6 +130,15 @@ class _MyAppState extends State<MyApp> {
           elevation: 5.0,
           actions: [
             IconButton(
+              icon: Icon(Icons.pie_chart, size: 30.0),  // Choose an appropriate icon
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TaskTrackingScreen()),
+                );
+              },
+            ),
+            IconButton(
               icon: Icon(Icons.notifications, size: 30.0),
               onPressed: () {},
             ),
@@ -158,6 +167,69 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+//tracking screen
+class TaskTrackingScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Task Tracking'),
+        backgroundColor: Colors.blueAccent,
+      ),
+      body: FutureBuilder<List<Task>>(
+        future: TaskDatabaseHelper.instance.getTasks(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasData) {
+            final tasks = snapshot.data!;
+            if (tasks.isEmpty) {
+              return Center(child: Text('No tasks available.'));
+            }
+            final completedTasks = tasks.where((task) => task.isCompleted).length;
+            final totalTasks = tasks.length;
+
+            double progress = totalTasks == 0 ? 0 : completedTasks / totalTasks;
+
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Completed Tasks: $completedTasks',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Total Tasks: $totalTasks',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 16),
+                  LinearProgressIndicator(
+                    value: progress,
+                    minHeight: 10,
+                    color: Colors.green,
+                    backgroundColor: Colors.red,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Progress: ${(progress * 100).toStringAsFixed(1)}%',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            return Center(child: Text('No tasks available.'));
+          }
+        },
+      ),
+    );
+  }
+}
+
 // CompletedTasksScreen - Displays all completed tasks
 class CompletedTasksScreen extends StatefulWidget {
   @override
@@ -375,9 +447,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-
-
 // AddTaskScreen - Add a new task
+
 class AddTaskScreen extends StatefulWidget {
   final Future<void> Function(String, String) notificationCallback;
 
@@ -391,6 +462,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
+  bool _isRepeat = false; // Track repeat status
+  List<String> _selectedDays = []; // Store selected days
 
   @override
   void initState() {
@@ -412,11 +485,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         return;
       }
 
-      // Create new task object
+      // Create new task object with repeat option
       Task task = Task(
-        name: taskName,
+        name: _nameController.text,
         description: _descriptionController.text,
+        repeat: _isRepeat,
+        repeatDays: _selectedDays,  // Assuming this is the selected repeat days
       );
+
 
       // Insert task into the database
       await TaskDatabaseHelper.instance.insertTask(task);
@@ -424,17 +500,27 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       // Trigger the notification after the task is added
       widget.notificationCallback("New Task Added", "The task '$taskName' has been added.");
 
-      // Trigger a state update to refresh the UI (in the parent screen)
-      setState(() {
-        // Any state change to trigger UI rebuild
-      });
-
       // Navigate back after the task is added
       Navigator.pop(context);
 
       // Optionally, show a Snackbar to confirm task addition
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Task added')));
     }
+  }
+
+  // Show a dialog to select repeat days
+  void _selectRepeatDays() async {
+    final List<String> allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    final List<String> selected = await showDialog<List<String>>(
+      context: context,
+      builder: (BuildContext context) {
+        return MultiSelectDialog(allDays: allDays, initialSelected: _selectedDays);
+      },
+    ) ?? [];
+
+    setState(() {
+      _selectedDays = selected;
+    });
   }
 
   @override
@@ -467,6 +553,20 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   return null;
                 },
               ),
+              SwitchListTile(
+                title: Text('Repeat task'),
+                value: _isRepeat,
+                onChanged: (value) {
+                  setState(() {
+                    _isRepeat = value;
+                  });
+                },
+              ),
+              if (_isRepeat)
+                ElevatedButton(
+                  onPressed: _selectRepeatDays,
+                  child: Text('Select Days'),
+                ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _addTask,
@@ -484,6 +584,46 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class MultiSelectDialog extends StatelessWidget {
+  final List<String> allDays;
+  final List<String> initialSelected;
+
+  MultiSelectDialog({required this.allDays, required this.initialSelected});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Select Repeat Days'),
+      content: SingleChildScrollView(
+        child: Column(
+          children: allDays.map((day) {
+            return CheckboxListTile(
+              title: Text(day),
+              value: initialSelected.contains(day),
+              onChanged: (bool? value) {
+                if (value == true) {
+                  initialSelected.add(day);
+                } else {
+                  initialSelected.remove(day);
+                }
+                (context as Element).markNeedsBuild();
+              },
+            );
+          }).toList(),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context, initialSelected);
+          },
+          child: Text('Done'),
+        ),
+      ],
     );
   }
 }
