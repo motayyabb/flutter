@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'repeat_container_code.dart';
 import 'icon_constants.dart';
 
+// Enum for Gender
+enum Gender { male, female }
+
 void main() {
   runApp(MyApp());
 }
@@ -31,7 +34,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String selected = ""; // Holds the currently selected gender
+  Gender? selectedGender; // Holds the currently selected gender
 
   @override
   Widget build(BuildContext context) {
@@ -56,15 +59,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          selected = "Male"; // Update the selected value
+                          selectedGender = Gender.male; // Update selected gender
                         });
                       },
                       child: RepeatContainerCode(
                         text: 'Male',
-                        color: selected == "Male"
-                            ? Colors.blue // Change color if selected
+                        color: selectedGender == Gender.male
+                            ? Colors.blue // Highlight if selected
                             : Colors.grey[850]!,
-                        icon: maleIcon,
+                        icon: maleIcon, // Male icon from constants
                       ),
                     ),
                   ),
@@ -72,15 +75,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          selected = "Female"; // Update the selected value
+                          selectedGender = Gender.female; // Update selected gender
                         });
                       },
                       child: RepeatContainerCode(
                         text: 'Female',
-                        color: selected == "Female"
-                            ? Colors.pink // Change color if selected
+                        color: selectedGender == Gender.female
+                            ? Colors.pink // Highlight if selected
                             : Colors.grey[800]!,
-                        icon: femaleIcon,
+                        icon: femaleIcon, // Female icon from constants
                       ),
                     ),
                   ),
