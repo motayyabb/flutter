@@ -35,6 +35,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Gender? selectedGender; // Holds the currently selected gender
+  double height = 170; // Default height value in cm
 
   void handleMalePress() {
     setState(() {
@@ -76,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? Colors.blue
                           : Colors.grey[850]!,
                       icon: maleIcon,
-                      onPressed: handleMalePress, // Call male handler
+                      onPressed: handleMalePress,
                     ),
                   ),
                   Expanded(
@@ -86,24 +87,58 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? Colors.pink
                           : Colors.grey[800]!,
                       icon: femaleIcon,
-                      onPressed: handleFemalePress, // Call female handler
+                      onPressed: handleFemalePress,
                     ),
                   ),
                 ],
               ),
             ),
 
-            // Middle Widget (Dynamic Message)
+            // Middle Widget (Static Height)
             Expanded(
-              child: RepeatContainerCode(
-                text: selectedGender == Gender.male
-                    ? 'You selected Male'
-                    : selectedGender == Gender.female
-                    ? 'You selected Female'
-                    : 'Make a Selection',
-                color: selectedGender == null
-                    ? Colors.grey[850]!
-                    : Colors.grey[700]!,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[850],
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: Colors.grey[700]!, width: 1),
+                ),
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Height",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Text(
+                          height.toStringAsFixed(1),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 48,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          " cm",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
 
