@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'repeat_container_code.dart'; // Import RepeatContainerCode
-import 'icon_constants.dart'; // Import Icon Constants
+import 'repeat_container_code.dart';
+import 'icon_constants.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,7 +25,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String selected = ""; // Holds the currently selected gender
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,22 +53,34 @@ class HomeScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selected = "Male"; // Update the selected value
+                        });
+                      },
                       child: RepeatContainerCode(
                         text: 'Male',
-                        color: Colors.grey[850]!,
-                        icon: maleIcon, // Male icon from constants
+                        color: selected == "Male"
+                            ? Colors.blue // Change color if selected
+                            : Colors.grey[850]!,
+                        icon: maleIcon,
                       ),
                     ),
                   ),
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selected = "Female"; // Update the selected value
+                        });
+                      },
                       child: RepeatContainerCode(
                         text: 'Female',
-                        color: Colors.grey[800]!,
-                        icon: femaleIcon, // Female icon from constants
+                        color: selected == "Female"
+                            ? Colors.pink // Change color if selected
+                            : Colors.grey[800]!,
+                        icon: femaleIcon,
                       ),
                     ),
                   ),
