@@ -100,7 +100,7 @@ class _MyAppState extends State<MyApp> {
       HomeScreen(notificationCallback: _showNotification),
       AddTaskScreen(notificationCallback: _showNotification),
       CompletedTasksScreen(),
-      RepeatedTasksScreen(),
+      RepeatedTasksScreen(notificationCallback: _showNotification),
       SettingsScreen(
         onDarkModeToggle: (bool value) {
           setState(() {
@@ -134,13 +134,9 @@ class _MyAppState extends State<MyApp> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => TaskTrackingScreen()),
+                  MaterialPageRoute(builder: (context) => ProgressReport()), // Navigate to ProgressReport screen
                 );
               },
-            ),
-            IconButton(
-              icon: Icon(Icons.notifications, size: 30.0),
-              onPressed: () {},
             ),
           ],
         ),
@@ -168,63 +164,68 @@ class _MyAppState extends State<MyApp> {
   }
 }
 //tracking screen
-class TaskTrackingScreen extends StatelessWidget {
+class ProgressReport extends StatefulWidget {
+  @override
+  _ProgressReportState createState() => _ProgressReportState();
+}
+
+class _ProgressReportState extends State<ProgressReport> {
+  double _progress = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateProgress();
+  }
+
+  // Method to update the progress from the database
+  Future<void> _updateProgress() async {
+    final progress = await TaskDatabaseHelper.instance.getCompletionProgress();
+    setState(() {
+      _progress = progress / 100; // Convert percentage to 0.0 - 1.0 scale
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Task Tracking'),
-        backgroundColor: Colors.blueAccent,
+        title: Text('Task Progress Report'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.pie_chart, size: 30.0),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProgressReport()),  // Navigate to ProgressReport
+              );
+            },
+          ),
+        ],
       ),
-      body: FutureBuilder<List<Task>>(
-        future: TaskDatabaseHelper.instance.getTasks(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasData) {
-            final tasks = snapshot.data!;
-            if (tasks.isEmpty) {
-              return Center(child: Text('No tasks available.'));
-            }
-            final completedTasks = tasks.where((task) => task.isCompleted).length;
-            final totalTasks = tasks.length;
-
-            double progress = totalTasks == 0 ? 0 : completedTasks / totalTasks;
-
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Completed Tasks: $completedTasks',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Total Tasks: $totalTasks',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 16),
-                  LinearProgressIndicator(
-                    value: progress,
-                    minHeight: 10,
-                    color: Colors.green,
-                    backgroundColor: Colors.red,
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    'Progress: ${(progress * 100).toStringAsFixed(1)}%',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ],
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            return Center(child: Text('No tasks available.'));
-          }
-        },
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Completion Progress: ${(_progress * 100).toStringAsFixed(2)}%',
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 20),
+            LinearProgressIndicator(
+              value: _progress,
+              minHeight: 10,
+              backgroundColor: Colors.grey[300],
+              color: Colors.green,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _updateProgress,
+              child: Text('Refresh Progress'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -274,17 +275,66 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
 
 // RepeatedTasksScreen - Displays tasks that have been inserted with the same name
 class RepeatedTasksScreen extends StatefulWidget {
+  final Future<void> Function(String, String) notificationCallback;
+
+  RepeatedTasksScreen({required this.notificationCallback});
+
   @override
   _RepeatedTasksScreenState createState() => _RepeatedTasksScreenState();
 }
 
 class _RepeatedTasksScreenState extends State<RepeatedTasksScreen> {
+  Future<void> _generateAndPrintPDF(List<Task> tasks) async {
+    final pdf = pw.Document();
+
+    pdf.addPage(pw.Page(
+      build: (pw.Context context) {
+        return pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            pw.Text("Repeated Tasks List", style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
+            pw.SizedBox(height: 20),
+            ...tasks.map((task) {
+              return pw.Padding(
+                padding: pw.EdgeInsets.only(bottom: 10),
+                child: pw.Text(
+                  "${task.name}: ${task.description}",
+                  style: pw.TextStyle(fontSize: 18),
+                ),
+              );
+            }).toList(),
+          ],
+        );
+      },
+    ));
+
+    await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => pdf.save());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Repeated Tasks')),
+      appBar: AppBar(
+        title: Text(
+          'Repeated Tasks',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
+        backgroundColor: Colors.blueAccent,
+        elevation: 5.0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.print, size: 30.0),
+            onPressed: () async {
+              // Fetch the repeated tasks currently displayed on the screen
+              var tasks = await TaskDatabaseHelper.instance.getRepeatedTasks();
+              // Generate and print the PDF for the repeated tasks
+              _generateAndPrintPDF(tasks);
+            },
+          ),
+        ],
+      ),
       body: FutureBuilder<List<Task>>(
-        future: TaskDatabaseHelper.instance.getTasks(),
+        future: TaskDatabaseHelper.instance.getRepeatedTasks(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -292,20 +342,59 @@ class _RepeatedTasksScreenState extends State<RepeatedTasksScreen> {
             return Center(child: Text('No repeated tasks found.'));
           }
 
-          var tasks = snapshot.data!;
-          var repeatedTasks = tasks.where((task) => tasks.where((t) => t.name == task.name).length > 1).toList();
+          // Filter out completed tasks from the list to display only incomplete tasks
+          var tasks = snapshot.data!.where((task) => !task.isCompleted).toList();
 
           return ListView.builder(
-            itemCount: repeatedTasks.length,
+            itemCount: tasks.length,
             itemBuilder: (context, index) {
-              final task = repeatedTasks[index];
+              final task = tasks[index];
               return Card(
                 elevation: 8,
                 margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                 child: ListTile(
-                  title: Text(task.name, style: TextStyle(fontWeight: FontWeight.bold)),
+                  title: Text(
+                    task.name,
+                    style: TextStyle(
+                      decoration: task.isCompleted ? TextDecoration.lineThrough : TextDecoration.none,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   subtitle: Text(task.description),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditTaskScreen(task: task),
+                            ),
+                          ).then((_) => setState(() {}));
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () async {
+                          await TaskDatabaseHelper.instance.deleteTask(task.id!);
+                          setState(() {});
+                          widget.notificationCallback("Task Deleted", "${task.name} has been deleted.");
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.check),
+                        onPressed: () async {
+                          task.isCompleted = true;
+                          await TaskDatabaseHelper.instance.updateTask(task);
+                          setState(() {});
+                          widget.notificationCallback("Task Completed", "${task.name} is marked as completed.");
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -315,6 +404,7 @@ class _RepeatedTasksScreenState extends State<RepeatedTasksScreen> {
     );
   }
 }
+
 // HomeScreen - Displays all tasks
 class HomeScreen extends StatefulWidget {
   final Future<void> Function(String, String) notificationCallback;
@@ -386,7 +476,9 @@ class _HomeScreenState extends State<HomeScreen> {
             return Center(child: Text('No tasks found.'));
           }
 
-          var tasks = snapshot.data!;
+          // Filter out completed tasks from the list to display only incomplete tasks
+          var tasks = snapshot.data!.where((task) => !task.isCompleted).toList();
+
           return ListView.builder(
             itemCount: tasks.length,
             itemBuilder: (context, index) {
@@ -446,6 +538,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
 
 // AddTaskScreen - Add a new task
 
