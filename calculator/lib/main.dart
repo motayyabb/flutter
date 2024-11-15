@@ -36,6 +36,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Gender? selectedGender; // Holds the currently selected gender
   double height = 170; // Default height value in cm
+  int weight = 60; // Default weight value in kg
 
   void handleMalePress() {
     setState(() {
@@ -96,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // Middle Widget (Height with Slider)
             Expanded(
-              flex: 2, // Make this widget larger than others for proper visibility
+              flex: 2,
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.grey[850],
@@ -158,15 +159,64 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: Row(
                 children: [
+                  // Left Bottom Widget (Weight Management)
                   Expanded(
-                    child: RepeatContainerCode(
-                      text: 'Bottom Left',
-                      color: Colors.grey[800]!,
-                      onPressed: () {
-                        print("Bottom Left Pressed");
-                      },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[850],
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(color: Colors.grey[700]!, width: 1),
+                      ),
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            "Weight",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "$weight kg",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    weight = weight > 0 ? weight - 1 : 0;
+                                  });
+                                },
+                                icon: Icon(Icons.remove, color: Colors.white),
+                                iconSize: 30,
+                              ),
+                              SizedBox(width: 20),
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    weight++;
+                                  });
+                                },
+                                icon: Icon(Icons.add, color: Colors.white),
+                                iconSize: 30,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
+
+                  // Right Bottom Widget (Placeholder)
                   Expanded(
                     child: RepeatContainerCode(
                       text: 'Bottom Right',
