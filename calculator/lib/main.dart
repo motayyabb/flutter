@@ -94,8 +94,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            // Middle Widget (Static Height)
+            // Middle Widget (Height with Slider)
             Expanded(
+              flex: 2, // Make this widget larger than others for proper visibility
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.grey[850],
@@ -104,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 padding: EdgeInsets.all(16.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
                       "Height",
@@ -114,7 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -136,6 +136,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ],
+                    ),
+                    Slider(
+                      value: height,
+                      min: 100.0,
+                      max: 220.0,
+                      activeColor: Colors.blue,
+                      inactiveColor: Colors.grey,
+                      onChanged: (double newValue) {
+                        setState(() {
+                          height = newValue;
+                        });
+                      },
                     ),
                   ],
                 ),
