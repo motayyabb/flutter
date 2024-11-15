@@ -36,6 +36,20 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Gender? selectedGender; // Holds the currently selected gender
 
+  void handleMalePress() {
+    setState(() {
+      selectedGender = Gender.male;
+    });
+    print("Male selected!");
+  }
+
+  void handleFemalePress() {
+    setState(() {
+      selectedGender = Gender.female;
+    });
+    print("Female selected!");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0), // Padding for the entire layout
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             // Top Row
@@ -56,49 +70,40 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedGender = Gender.male; // Update selected gender
-                        });
-                      },
-                      child: RepeatContainerCode(
-                        text: 'Male',
-                        color: selectedGender == Gender.male
-                            ? Colors.blue // Highlight if selected
-                            : Colors.grey[850]!,
-                        icon: maleIcon, // Male icon from constants
-                      ),
+                    child: RepeatContainerCode(
+                      text: 'Male',
+                      color: selectedGender == Gender.male
+                          ? Colors.blue
+                          : Colors.grey[850]!,
+                      icon: maleIcon,
+                      onPressed: handleMalePress, // Call male handler
                     ),
                   ),
                   Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedGender = Gender.female; // Update selected gender
-                        });
-                      },
-                      child: RepeatContainerCode(
-                        text: 'Female',
-                        color: selectedGender == Gender.female
-                            ? Colors.pink // Highlight if selected
-                            : Colors.grey[800]!,
-                        icon: femaleIcon, // Female icon from constants
-                      ),
+                    child: RepeatContainerCode(
+                      text: 'Female',
+                      color: selectedGender == Gender.female
+                          ? Colors.pink
+                          : Colors.grey[800]!,
+                      icon: femaleIcon,
+                      onPressed: handleFemalePress, // Call female handler
                     ),
                   ),
                 ],
               ),
             ),
 
-            // Middle Widget
+            // Middle Widget (Dynamic Message)
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: RepeatContainerCode(
-                  text: 'Middle',
-                  color: Colors.grey[850]!,
-                ),
+              child: RepeatContainerCode(
+                text: selectedGender == Gender.male
+                    ? 'You selected Male'
+                    : selectedGender == Gender.female
+                    ? 'You selected Female'
+                    : 'Make a Selection',
+                color: selectedGender == null
+                    ? Colors.grey[850]!
+                    : Colors.grey[700]!,
               ),
             ),
 
@@ -107,21 +112,21 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RepeatContainerCode(
-                        text: 'Bottom Left',
-                        color: Colors.grey[800]!,
-                      ),
+                    child: RepeatContainerCode(
+                      text: 'Bottom Left',
+                      color: Colors.grey[800]!,
+                      onPressed: () {
+                        print("Bottom Left Pressed");
+                      },
                     ),
                   ),
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RepeatContainerCode(
-                        text: 'Bottom Right',
-                        color: Colors.grey[850]!,
-                      ),
+                    child: RepeatContainerCode(
+                      text: 'Bottom Right',
+                      color: Colors.grey[850]!,
+                      onPressed: () {
+                        print("Bottom Right Pressed");
+                      },
                     ),
                   ),
                 ],
