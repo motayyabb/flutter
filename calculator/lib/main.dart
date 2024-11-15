@@ -47,8 +47,9 @@ class HomeScreen extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: RepeatContainerCode(
-                        text: 'Top Left',
+                        text: 'Male',
                         color: Colors.grey[850]!,
+                        icon: Icons.male, // Built-in Material Icon for Male
                       ),
                     ),
                   ),
@@ -56,8 +57,9 @@ class HomeScreen extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: RepeatContainerCode(
-                        text: 'Top Right',
+                        text: 'Female',
                         color: Colors.grey[800]!,
+                        icon: Icons.female, // Built-in Material Icon for Female
                       ),
                     ),
                   ),
@@ -111,11 +113,13 @@ class HomeScreen extends StatelessWidget {
 class RepeatContainerCode extends StatelessWidget {
   final String text;
   final Color color;
+  final IconData? icon; // Optional icon property
 
   const RepeatContainerCode({
     Key? key,
     required this.text,
     required this.color,
+    this.icon, // Optional parameter for the icon
   }) : super(key: key);
 
   @override
@@ -126,11 +130,21 @@ class RepeatContainerCode extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         border: Border.all(color: Colors.grey[700]!, width: 1),
       ),
-      child: Center(
-        child: Text(
-          text,
-          style: TextStyle(color: Colors.white),
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (icon != null)
+            Icon(
+              icon,
+              color: Colors.white,
+              size: 40,
+            ),
+          SizedBox(height: 10), // Space between icon and text
+          Text(
+            text,
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
+        ],
       ),
     );
   }
