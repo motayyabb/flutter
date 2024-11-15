@@ -11,11 +11,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'BMI Calculator',
       theme: ThemeData(
-        brightness: Brightness.dark, // Sets the app theme to dark
-        primaryColor: Colors.blue, // AppBar background color
-        scaffoldBackgroundColor: Colors.black, // Background color of the app
+        brightness: Brightness.dark,
+        primaryColor: Colors.black,
+        scaffoldBackgroundColor: Colors.black,
         textTheme: TextTheme(
-          bodyMedium: TextStyle(color: Colors.white), // Default text color
+          bodyMedium: TextStyle(color: Colors.white),
         ),
       ),
       home: HomeScreen(),
@@ -30,19 +30,123 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'BMI Calculator',
-          style: TextStyle(color: Colors.white), // Title text color
+          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.black, // AppBar background color
-        centerTitle: true, // Centers the title
+        backgroundColor: Colors.black,
+        centerTitle: true,
       ),
-      body: Center(
-        child: Text(
-          'Welcome to the BMI Calculator App!',
-          style: TextStyle(
-            fontSize: 20, // Text size
-            fontWeight: FontWeight.bold, // Text boldness
-            color: Colors.white, // Text color
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0), // Padding for the entire layout
+        child: Column(
+          children: [
+            // Top Row: Two Expanded widgets with spacing and rounded borders
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[900],
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: Colors.grey[700]!, width: 1),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Top Left',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[900],
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: Colors.grey[700]!, width: 1),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Top Right',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Middle Expanded widget with spacing and rounded borders
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[900],
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: Colors.grey[700]!, width: 1),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Middle',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            // Bottom Row: Two Expanded widgets with spacing and rounded borders
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[900],
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: Colors.grey[700]!, width: 1),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Bottom Left',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[900],
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: Colors.grey[700]!, width: 1),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Bottom Right',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
