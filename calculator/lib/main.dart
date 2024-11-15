@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Gender? selectedGender; // Holds the currently selected gender
   double height = 170; // Default height value in cm
   int weight = 60; // Default weight value in kg
+  int age = 25; // Default age value
 
   void handleMalePress() {
     setState(() {
@@ -64,10 +65,10 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
         child: Column(
           children: [
-            // Top Row
+            // Top Row (Gender Selection)
             Expanded(
               child: Row(
                 children: [
@@ -81,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: handleMalePress,
                     ),
                   ),
+                  SizedBox(width: 12), // Space between gender widgets
                   Expanded(
                     child: RepeatContainerCode(
                       text: 'Female',
@@ -95,14 +97,24 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
+            SizedBox(height: 12), // Space between rows
+
             // Middle Widget (Height with Slider)
             Expanded(
               flex: 2,
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.grey[850],
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: Colors.grey[700]!, width: 1),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.grey[700]!, width: 2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 8,
+                      offset: Offset(0, 3), // Shadow position
+                    ),
+                  ],
                 ),
                 padding: EdgeInsets.all(16.0),
                 child: Column(
@@ -155,17 +167,27 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            // Bottom Row
+            SizedBox(height: 12), // Space between rows
+
+            // Bottom Row (Weight and Age Widgets)
             Expanded(
               child: Row(
                 children: [
-                  // Left Bottom Widget (Weight Management)
+                  // Weight Widget
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.grey[850],
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(color: Colors.grey[700]!, width: 1),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.grey[700]!, width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 8,
+                            offset: Offset(0, 3), // Shadow position
+                          ),
+                        ],
                       ),
                       padding: EdgeInsets.all(16.0),
                       child: Column(
@@ -215,15 +237,70 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
+                  SizedBox(width: 12), // Space between widgets
 
-                  // Right Bottom Widget (Placeholder)
+                  // Age Widget
                   Expanded(
-                    child: RepeatContainerCode(
-                      text: 'Bottom Right',
-                      color: Colors.grey[850]!,
-                      onPressed: () {
-                        print("Bottom Right Pressed");
-                      },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[850],
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.grey[700]!, width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 8,
+                            offset: Offset(0, 3), // Shadow position
+                          ),
+                        ],
+                      ),
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            "Age",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "$age",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    age = age > 0 ? age - 1 : 0;
+                                  });
+                                },
+                                icon: Icon(Icons.remove, color: Colors.white),
+                                iconSize: 30,
+                              ),
+                              SizedBox(width: 20),
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    age++;
+                                  });
+                                },
+                                icon: Icon(Icons.add, color: Colors.white),
+                                iconSize: 30,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
