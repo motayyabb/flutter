@@ -39,43 +39,25 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.all(8.0), // Padding for the entire layout
         child: Column(
           children: [
-            // Top Row: Two Expanded widgets with spacing and rounded borders
+            // Top Row
             Expanded(
               child: Row(
                 children: [
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[900],
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: Colors.grey[700]!, width: 1),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Top Left',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
+                      child: RepeatContainerCode(
+                        text: 'Top Left',
+                        color: Colors.grey[850]!,
                       ),
                     ),
                   ),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[900],
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: Colors.grey[700]!, width: 1),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Top Right',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
+                      child: RepeatContainerCode(
+                        text: 'Top Right',
+                        color: Colors.grey[800]!,
                       ),
                     ),
                   ),
@@ -83,63 +65,36 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-            // Middle Expanded widget with spacing and rounded borders
+            // Middle Widget
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[900],
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: Colors.grey[700]!, width: 1),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Middle',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                child: RepeatContainerCode(
+                  text: 'Middle',
+                  color: Colors.grey[850]!,
                 ),
               ),
             ),
 
-            // Bottom Row: Two Expanded widgets with spacing and rounded borders
+            // Bottom Row
             Expanded(
               child: Row(
                 children: [
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[900],
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: Colors.grey[700]!, width: 1),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Bottom Left',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
+                      child: RepeatContainerCode(
+                        text: 'Bottom Left',
+                        color: Colors.grey[800]!,
                       ),
                     ),
                   ),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[900],
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: Colors.grey[700]!, width: 1),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Bottom Right',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
+                      child: RepeatContainerCode(
+                        text: 'Bottom Right',
+                        color: Colors.grey[850]!,
                       ),
                     ),
                   ),
@@ -147,6 +102,34 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class RepeatContainerCode extends StatelessWidget {
+  final String text;
+  final Color color;
+
+  const RepeatContainerCode({
+    Key? key,
+    required this.text,
+    required this.color,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.grey[700]!, width: 1),
+      ),
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle(color: Colors.white),
         ),
       ),
     );
