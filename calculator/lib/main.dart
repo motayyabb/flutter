@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'repeat_container_code.dart';
 import 'icon_constants.dart';
+import 'result_screen.dart'; // Import the ResultScreen
 
 // Enum for Gender
 enum Gender { male, female }
@@ -53,6 +54,19 @@ class _HomeScreenState extends State<HomeScreen> {
     print("Female selected!");
   }
 
+  void navigateToResultScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ResultScreen(
+          height: height,
+          weight: weight,
+          age: age,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,250 +78,257 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.black,
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-        child: Column(
-          children: [
-            // Top Row (Gender Selection)
-            Expanded(
-              child: Row(
+      body: Column(
+        children: [
+          Expanded(
+            flex: 6, // Main content occupies 6/7 of the screen
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+              child: Column(
                 children: [
+                  // Top Row (Gender Selection)
                   Expanded(
-                    child: RepeatContainerCode(
-                      text: 'Male',
-                      color: selectedGender == Gender.male
-                          ? Colors.blue
-                          : Colors.grey[850]!,
-                      icon: maleIcon,
-                      onPressed: handleMalePress,
-                    ),
-                  ),
-                  SizedBox(width: 12), // Space between gender widgets
-                  Expanded(
-                    child: RepeatContainerCode(
-                      text: 'Female',
-                      color: selectedGender == Gender.female
-                          ? Colors.pink
-                          : Colors.grey[800]!,
-                      icon: femaleIcon,
-                      onPressed: handleFemalePress,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            SizedBox(height: 12), // Space between rows
-
-            // Middle Widget (Height with Slider)
-            Expanded(
-              flex: 2,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[850],
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.grey[700]!, width: 2),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 8,
-                      offset: Offset(0, 3), // Shadow position
-                    ),
-                  ],
-                ),
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "Height",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
+                    child: Row(
                       children: [
-                        Text(
-                          height.toStringAsFixed(1),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 48,
-                            fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: RepeatContainerCode(
+                            text: 'Male',
+                            color: selectedGender == Gender.male
+                                ? Colors.blue
+                                : Colors.grey[850]!,
+                            icon: maleIcon,
+                            onPressed: handleMalePress,
                           ),
                         ),
-                        Text(
-                          " cm",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
+                        SizedBox(width: 12), // Space between gender widgets
+                        Expanded(
+                          child: RepeatContainerCode(
+                            text: 'Female',
+                            color: selectedGender == Gender.female
+                                ? Colors.pink
+                                : Colors.grey[800]!,
+                            icon: femaleIcon,
+                            onPressed: handleFemalePress,
                           ),
                         ),
                       ],
                     ),
-                    Slider(
-                      value: height,
-                      min: 100.0,
-                      max: 220.0,
-                      activeColor: Colors.blue,
-                      inactiveColor: Colors.grey,
-                      onChanged: (double newValue) {
-                        setState(() {
-                          height = newValue;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                  ),
 
-            SizedBox(height: 12), // Space between rows
+                  SizedBox(height: 12), // Space between rows
 
-            // Bottom Row (Weight and Age Widgets)
-            Expanded(
-              child: Row(
-                children: [
-                  // Weight Widget
+                  // Middle Widget (Height with Slider)
                   Expanded(
+                    flex: 2,
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.grey[850],
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.grey[700]!, width: 2),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 8,
-                            offset: Offset(0, 3), // Shadow position
-                          ),
-                        ],
                       ),
                       padding: EdgeInsets.all(16.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            "Weight",
+                            "Height",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(
-                            "$weight kg",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 36,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    weight = weight > 0 ? weight - 1 : 0;
-                                  });
-                                },
-                                icon: Icon(Icons.remove, color: Colors.white),
-                                iconSize: 30,
+                              Text(
+                                height.toStringAsFixed(1),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 48,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              SizedBox(width: 20),
-                              IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    weight++;
-                                  });
-                                },
-                                icon: Icon(Icons.add, color: Colors.white),
-                                iconSize: 30,
+                              Text(
+                                " cm",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
                               ),
                             ],
+                          ),
+                          Slider(
+                            value: height,
+                            min: 100.0,
+                            max: 220.0,
+                            activeColor: Colors.blue,
+                            inactiveColor: Colors.grey,
+                            onChanged: (double newValue) {
+                              setState(() {
+                                height = newValue;
+                              });
+                            },
                           ),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(width: 12), // Space between widgets
 
-                  // Age Widget
+                  SizedBox(height: 12), // Space between rows
+
+                  // Bottom Row (Weight and Age Widgets)
                   Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[850],
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.grey[700]!, width: 2),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 8,
-                            offset: Offset(0, 3), // Shadow position
-                          ),
-                        ],
-                      ),
-                      padding: EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Age",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                    child: Row(
+                      children: [
+                        // Weight Widget
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[850],
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: Colors.grey[700]!, width: 2),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  "Weight",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  "$weight kg",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 36,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          weight = weight > 0 ? weight - 1 : 0;
+                                        });
+                                      },
+                                      icon: Icon(Icons.remove, color: Colors.white),
+                                      iconSize: 30,
+                                    ),
+                                    SizedBox(width: 20),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          weight++;
+                                        });
+                                      },
+                                      icon: Icon(Icons.add, color: Colors.white),
+                                      iconSize: 30,
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          Text(
-                            "$age",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 36,
-                              fontWeight: FontWeight.bold,
+                        ),
+                        SizedBox(width: 12), // Space between widgets
+
+                        // Age Widget
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[850],
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: Colors.grey[700]!, width: 2),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  "Age",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  "$age",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 36,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          age = age > 0 ? age - 1 : 0;
+                                        });
+                                      },
+                                      icon: Icon(Icons.remove, color: Colors.white),
+                                      iconSize: 30,
+                                    ),
+                                    SizedBox(width: 20),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          age++;
+                                        });
+                                      },
+                                      icon: Icon(Icons.add, color: Colors.white),
+                                      iconSize: 30,
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    age = age > 0 ? age - 1 : 0;
-                                  });
-                                },
-                                icon: Icon(Icons.remove, color: Colors.white),
-                                iconSize: 30,
-                              ),
-                              SizedBox(width: 20),
-                              IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    age++;
-                                  });
-                                },
-                                icon: Icon(Icons.add, color: Colors.white),
-                                iconSize: 30,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+
+          // Calculate Button
+          Container(
+            width: double.infinity,
+            height: 70,
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: ElevatedButton(
+              onPressed: navigateToResultScreen,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              child: Text(
+                "Calculate BMI",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
