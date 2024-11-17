@@ -29,7 +29,11 @@ A simple, interactive **BMI Calculator** app developed with **Flutter**. This ap
 ## Demo Video
 
 Watch the demo video of the BMI Calculator app:  
-[Demo Video Link](https://github.com/your-username/bmi-calculator-demo.mp4)
+
+
+https://github.com/user-attachments/assets/2f57bdcf-d777-4e15-bcb9-179ae710d60d
+
+
 
 ## How to Run
 
