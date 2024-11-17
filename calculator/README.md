@@ -25,7 +25,7 @@ A simple, interactive **BMI Calculator** app developed with **Flutter**. This ap
 
 ## Screenshots
 
-| Home Screen                           | Result Screen                          | BMI Calculation Example               |
+| Home Screen                           | Light Screen                          | BMI Calculation Example               |
 |---------------------------------------|----------------------------------------|---------------------------------------|
 | ![Home Screen](https://github.com/user-attachments/assets/46cc99eb-852d-46c3-a2c6-9eb2897057b5) | ![Result Screen](https://github.com/user-attachments/assets/570100db-6167-4010-a36d-b343e7ba0bd3) | ![BMI Calculation](https://github.com/user-attachments/assets/2c40dc3b-fcd8-4ed3-814b-c643efbfabca) |
 
