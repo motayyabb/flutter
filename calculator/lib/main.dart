@@ -305,13 +305,16 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // Calculate Button
+      Column(
+        children: [
+          // Other widgets above...
+          Spacer(), // Pushes the button to the bottom if needed
           Container(
             width: double.infinity,
             height: 70,
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: ElevatedButton(
-              onPressed: navigateToResultScreen,
+              onPressed: navigateToResultScreen, // Define this function in your class
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 shape: RoundedRectangleBorder(
@@ -329,6 +332,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+      );
+
+      ],
       ),
     );
   }
