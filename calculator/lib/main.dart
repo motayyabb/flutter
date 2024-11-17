@@ -35,7 +35,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Gender? selectedGender; // Holds the currently selected gender
+  Gender? selectedGender;
   double height = 170; // Default height value in cm
   int weight = 60; // Default weight value in kg
   int age = 25; // Default age value
@@ -44,21 +44,27 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       selectedGender = Gender.male;
     });
-    print("Male selected!");
   }
 
   void handleFemalePress() {
     setState(() {
       selectedGender = Gender.female;
     });
-    print("Female selected!");
   }
 
   void navigateToResultScreen() {
+    if (selectedGender == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please select a gender")),
+      );
+      return;
+    }
+
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ResultScreen(
+          gender: selectedGender!,
           height: height,
           weight: weight,
           age: age,
@@ -81,12 +87,12 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           Expanded(
-            flex: 6, // Main content occupies 6/7 of the screen
+            flex: 7,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
               child: Column(
                 children: [
-                  // Top Row (Gender Selection)
+                  // Gender Selection
                   Expanded(
                     child: Row(
                       children: [
@@ -100,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             onPressed: handleMalePress,
                           ),
                         ),
-                        SizedBox(width: 12), // Space between gender widgets
+                        SizedBox(width: 12),
                         Expanded(
                           child: RepeatContainerCode(
                             text: 'Female',
@@ -114,10 +120,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
+                  SizedBox(height: 12),
 
-                  SizedBox(height: 12), // Space between rows
-
-                  // Middle Widget (Height with Slider)
+                  // Height Slider
                   Expanded(
                     flex: 2,
                     child: Container(
@@ -176,10 +181,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 12),
 
-                  SizedBox(height: 12), // Space between rows
-
-                  // Bottom Row (Weight and Age Widgets)
+                  // Weight and Age Widgets
                   Expanded(
                     child: Row(
                       children: [
@@ -212,26 +216,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    IconButton(
+                                    FloatingActionButton(
+                                      heroTag: "weight-decrement",
                                       onPressed: () {
                                         setState(() {
                                           weight = weight > 0 ? weight - 1 : 0;
                                         });
                                       },
-                                      icon: Icon(Icons.remove, color: Colors.white),
-                                      iconSize: 30,
+                                      mini: true,
+                                      backgroundColor: Colors.grey[700],
+                                      child: Icon(Icons.remove, color: Colors.white),
                                     ),
-                                    SizedBox(width: 20),
-                                    IconButton(
+                                    FloatingActionButton(
+                                      heroTag: "weight-increment",
                                       onPressed: () {
                                         setState(() {
                                           weight++;
                                         });
                                       },
-                                      icon: Icon(Icons.add, color: Colors.white),
-                                      iconSize: 30,
+                                      mini: true,
+                                      backgroundColor: Colors.grey[700],
+                                      child: Icon(Icons.add, color: Colors.white),
                                     ),
                                   ],
                                 ),
@@ -239,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 12), // Space between widgets
+                        SizedBox(width: 12),
 
                         // Age Widget
                         Expanded(
@@ -270,26 +277,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    IconButton(
+                                    FloatingActionButton(
+                                      heroTag: "age-decrement",
                                       onPressed: () {
                                         setState(() {
                                           age = age > 0 ? age - 1 : 0;
                                         });
                                       },
-                                      icon: Icon(Icons.remove, color: Colors.white),
-                                      iconSize: 30,
+                                      mini: true,
+                                      backgroundColor: Colors.grey[700],
+                                      child: Icon(Icons.remove, color: Colors.white),
                                     ),
-                                    SizedBox(width: 20),
-                                    IconButton(
+                                    FloatingActionButton(
+                                      heroTag: "age-increment",
                                       onPressed: () {
                                         setState(() {
                                           age++;
                                         });
                                       },
-                                      icon: Icon(Icons.add, color: Colors.white),
-                                      iconSize: 30,
+                                      mini: true,
+                                      backgroundColor: Colors.grey[700],
+                                      child: Icon(Icons.add, color: Colors.white),
                                     ),
                                   ],
                                 ),
@@ -305,16 +315,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-      Column(
-        children: [
-          // Other widgets above...
-          Spacer(), // Pushes the button to the bottom if needed
+          // Calculate Button
           Container(
             width: double.infinity,
             height: 70,
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: ElevatedButton(
-              onPressed: navigateToResultScreen, // Define this function in your class
+              onPressed: navigateToResultScreen,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 shape: RoundedRectangleBorder(
@@ -332,9 +339,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
-      );
-
-      ],
       ),
     );
   }
