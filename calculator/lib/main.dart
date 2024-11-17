@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'repeat_container_code.dart';
 import 'icon_constants.dart';
-import 'result_screen.dart'; // Import the ResultScreen
+import 'result_screen.dart';
 
 // Enum for Gender
 enum Gender { male, female }
@@ -13,19 +13,41 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'BMI Calculator',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: Colors.black,
-        scaffoldBackgroundColor: Colors.black,
-        textTheme: TextTheme(
-          bodyMedium: TextStyle(color: Colors.white),
-        ),
-      ),
-      home: HomeScreen(),
+    return ValueListenableBuilder<bool>(
+      valueListenable: ThemeNotifier.isDarkMode,
+      builder: (context, isDarkMode, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'BMI Calculator',
+          theme: isDarkMode
+              ? ThemeData(
+            brightness: Brightness.dark,
+            primaryColor: Colors.black,
+            scaffoldBackgroundColor: Colors.black,
+            textTheme: TextTheme(
+              bodyMedium: TextStyle(color: Colors.white),
+            ),
+          )
+              : ThemeData(
+            brightness: Brightness.light,
+            primaryColor: Colors.white,
+            scaffoldBackgroundColor: Colors.white,
+            textTheme: TextTheme(
+              bodyMedium: TextStyle(color: Colors.black),
+            ),
+          ),
+          home: HomeScreen(),
+        );
+      },
     );
+  }
+}
+
+class ThemeNotifier {
+  static final ValueNotifier<bool> isDarkMode = ValueNotifier<bool>(true);
+
+  static void toggleTheme() {
+    isDarkMode.value = !isDarkMode.value;
   }
 }
 
@@ -36,9 +58,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Gender? selectedGender;
-  double height = 170; // Default height value in cm
-  int weight = 60; // Default weight value in kg
-  int age = 25; // Default age value
+  double height = 170; // Default height in cm
+  int weight = 60; // Default weight in kg
+  int age = 25; // Default age
 
   void handleMalePress() {
     setState(() {
@@ -79,10 +101,21 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text(
           'BMI Calculator',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: Theme.of(context).primaryColor,
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(
+              ThemeNotifier.isDarkMode.value ? Icons.light_mode : Icons.dark_mode,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
+            ),
+            onPressed: () {
+              ThemeNotifier.toggleTheme();
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -101,18 +134,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             text: 'Male',
                             color: selectedGender == Gender.male
                                 ? Colors.blue
-                                : Colors.grey[850]!,
+                                : Theme.of(context).primaryColor.withOpacity(0.1),
                             icon: maleIcon,
                             onPressed: handleMalePress,
                           ),
                         ),
-                        SizedBox(width: 12),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: RepeatContainerCode(
                             text: 'Female',
                             color: selectedGender == Gender.female
                                 ? Colors.pink
-                                : Colors.grey[800]!,
+                                : Theme.of(context).primaryColor.withOpacity(0.1),
                             icon: femaleIcon,
                             onPressed: handleFemalePress,
                           ),
@@ -120,25 +153,24 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
                   // Height Slider
                   Expanded(
                     flex: 2,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey[850],
+                        color: Theme.of(context).primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.grey[700]!, width: 2),
                       ),
-                      padding: EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
                             "Height",
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Theme.of(context).textTheme.bodyMedium?.color,
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
@@ -151,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text(
                                 height.toStringAsFixed(1),
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Theme.of(context).textTheme.bodyMedium?.color,
                                   fontSize: 48,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -159,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text(
                                 " cm",
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Theme.of(context).textTheme.bodyMedium?.color,
                                   fontSize: 18,
                                 ),
                               ),
@@ -170,7 +202,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             min: 100.0,
                             max: 220.0,
                             activeColor: Colors.blue,
-                            inactiveColor: Colors.grey,
+                            inactiveColor: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.grey
+                                : Colors.black26,
                             onChanged: (double newValue) {
                               setState(() {
                                 height = newValue;
@@ -181,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
                   // Weight and Age Widgets
                   Expanded(
@@ -189,20 +223,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         // Weight Widget
                         Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey[850],
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.grey[700]!, width: 2),
-                            ),
-                            padding: EdgeInsets.all(16.0),
+                          child: RepeatContainerCode(
+                            text: "Weight",
+                            color: Theme.of(context).primaryColor.withOpacity(0.1),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Text(
                                   "Weight",
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Theme.of(context).textTheme.bodyMedium?.color,
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -210,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Text(
                                   "$weight kg",
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Theme.of(context).textTheme.bodyMedium?.color,
                                     fontSize: 36,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -227,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                       mini: true,
                                       backgroundColor: Colors.grey[700],
-                                      child: Icon(Icons.remove, color: Colors.white),
+                                      child: const Icon(Icons.remove, color: Colors.white),
                                     ),
                                     FloatingActionButton(
                                       heroTag: "weight-increment",
@@ -238,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                       mini: true,
                                       backgroundColor: Colors.grey[700],
-                                      child: Icon(Icons.add, color: Colors.white),
+                                      child: const Icon(Icons.add, color: Colors.white),
                                     ),
                                   ],
                                 ),
@@ -246,24 +276,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 12),
+                        const SizedBox(width: 12),
 
                         // Age Widget
                         Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey[850],
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.grey[700]!, width: 2),
-                            ),
-                            padding: EdgeInsets.all(16.0),
+                          child: RepeatContainerCode(
+                            text: "Age",
+                            color: Theme.of(context).primaryColor.withOpacity(0.1),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Text(
                                   "Age",
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Theme.of(context).textTheme.bodyMedium?.color,
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -271,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Text(
                                   "$age",
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Theme.of(context).textTheme.bodyMedium?.color,
                                     fontSize: 36,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -288,7 +314,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                       mini: true,
                                       backgroundColor: Colors.grey[700],
-                                      child: Icon(Icons.remove, color: Colors.white),
+                                      child: const Icon(Icons.remove, color: Colors.white),
                                     ),
                                     FloatingActionButton(
                                       heroTag: "age-increment",
@@ -299,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                       mini: true,
                                       backgroundColor: Colors.grey[700],
-                                      child: Icon(Icons.add, color: Colors.white),
+                                      child: const Icon(Icons.add, color: Colors.white),
                                     ),
                                   ],
                                 ),
@@ -319,7 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             width: double.infinity,
             height: 70,
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: ElevatedButton(
               onPressed: navigateToResultScreen,
               style: ElevatedButton.styleFrom(
@@ -328,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 "Calculate BMI",
                 style: TextStyle(
                   fontSize: 20,

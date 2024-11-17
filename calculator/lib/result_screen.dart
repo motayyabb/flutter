@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'main.dart'; // To use the Gender enum
 
 class ResultScreen extends StatelessWidget {
+  final Gender gender;
   final double height;
   final int weight;
   final int age;
 
   ResultScreen({
+    required this.gender,
     required this.height,
     required this.weight,
     required this.age,
@@ -20,19 +23,39 @@ class ResultScreen extends StatelessWidget {
     String bmiCategory;
     String bmiDescription;
 
-    if (bmi < 18.5) {
-      bmiCategory = "Underweight";
-      bmiDescription = "You are under the normal body weight. Try to gain some weight.";
-    } else if (bmi < 25) {
-      bmiCategory = "Normal";
-      bmiDescription = "You have a normal body weight. Great job!";
-    } else if (bmi < 30) {
-      bmiCategory = "Overweight";
-      bmiDescription = "You are slightly overweight. Try to exercise more.";
+    if (gender == Gender.male) {
+      if (bmi < 18.5) {
+        bmiCategory = "Underweight";
+        bmiDescription = "You are underweight for a male. Consider a balanced diet.";
+      } else if (bmi < 25) {
+        bmiCategory = "Normal";
+        bmiDescription = "Your BMI is normal. Keep it up!";
+      } else if (bmi < 30) {
+        bmiCategory = "Overweight";
+        bmiDescription = "You are slightly overweight for a male. Try to exercise more.";
+      } else {
+        bmiCategory = "Obese";
+        bmiDescription = "You are in the obese range. Consult with a doctor.";
+      }
+    } else if (gender == Gender.female) {
+      if (bmi < 18.5) {
+        bmiCategory = "Underweight";
+        bmiDescription = "You are underweight for a female. Consider a balanced diet.";
+      } else if (bmi < 25) {
+        bmiCategory = "Normal";
+        bmiDescription = "Your BMI is normal. Keep it up!";
+      } else if (bmi < 30) {
+        bmiCategory = "Overweight";
+        bmiDescription = "You are slightly overweight for a female. Try to exercise more.";
+      } else {
+        bmiCategory = "Obese";
+        bmiDescription = "You are in the obese range. Consult with a doctor.";
+      }
     } else {
-      bmiCategory = "Obese";
-      bmiDescription = "You are in the obese range. Consult with a doctor.";
+      bmiCategory = "Unknown";
+      bmiDescription = "Gender not recognized. Please specify a valid gender.";
     }
+
 
     return Scaffold(
       appBar: AppBar(
