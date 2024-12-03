@@ -25,6 +25,57 @@ The **NGO Management Flutter App** is designed to streamline operations for NGOs
 
 ---
 
+## **Functional Requirements**
+
+### **1. User Authentication**
+- **Admin Login**:
+  - Manage events, donations, beneficiaries, and volunteers.
+- **Donor Login**:
+  - Register and track their donation history.
+- **Volunteer Login**:
+  - Register and view tasks assigned by the admin.
+
+### **2. Donation Management**
+- **Add Donation**:
+  - Record monetary or in-kind donations.
+  - Enable one-time or recurring donations.
+- **Donation History**:
+  - Allow donors to view their contributions and impact.
+  - Admins can generate financial reports.
+  
+### **3. Event Management**
+- **Create and Manage Events**:
+  - Admins can add, edit, or delete events.
+- **Event Registration**:
+  - Donors and volunteers can sign up or donate for events.
+- **Event Reporting**:
+  - Generate reports showing funds raised, participants, and event success.
+
+### **4. Volunteer Management**
+- **Task Assignment**:
+  - Admins can assign tasks to volunteers.
+- **Task Tracking**:
+  - Volunteers can update and track task progress.
+
+### **5. Beneficiary Management**
+- **Create Profiles**:
+  - Admins can manage beneficiary details.
+- **Assistance Tracking**:
+  - Record the aid provided to each beneficiary.
+  
+### **6. Notifications**
+- **Push Notifications**:
+  - Real-time updates for events, tasks, and donations using Firebase Cloud Messaging.
+
+### **7. Financial Reporting**
+- Generate comprehensive reports for donations, expenses, and balances.
+- Export reports in formats like PDF or CSV.
+
+### **8. Payment Integration**
+- Secure Stripe/PayPal payment gateway for donations and event ticket purchases.
+
+---
+
 ## **Project Structure**
 
 ### **Screens and Roles**
