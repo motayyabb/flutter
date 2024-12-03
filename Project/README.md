@@ -1,13 +1,13 @@
 # NGO Management Flutter App
 
 ## **Overview**
-The **NGO Management Flutter App** is designed to streamline operations for NGOs by managing donations, events, volunteers, and finances. It provides separate interfaces for **Admins**, **Donors**, and **Volunteers** to handle specific responsibilities.
+The **NGO Management Flutter App** is designed to streamline operations for NGOs by managing donations, events, and finances. It provides separate interfaces for **Admins**, **Donors**, and **Volunteers** to handle specific responsibilities.
 
 ---
 
 ## **Features**
 1. **Admin Role**:
-   - Manage events, donations, beneficiaries, and volunteers.
+   - Manage events and donations.
    - Generate reports for donations, finances, and events.
 
 2. **Donor Role**:
@@ -15,12 +15,11 @@ The **NGO Management Flutter App** is designed to streamline operations for NGOs
    - View donation history and impact.
 
 3. **Volunteer Role**:
-   - View and perform assigned tasks.
-   - Track progress on assigned activities.
+   - Add, edit, and delete donation records.
 
 4. **Core Functionalities**:
    - Real-time financial reporting.
-   - Event and task management.
+   - Event and donation management.
    - Push notifications for updates.
 
 ---
@@ -29,11 +28,11 @@ The **NGO Management Flutter App** is designed to streamline operations for NGOs
 
 ### **1. User Authentication**
 - **Admin Login**:
-  - Manage events, donations, beneficiaries, and volunteers.
+  - Manage events and donations.
 - **Donor Login**:
   - Register and track their donation history.
 - **Volunteer Login**:
-  - Register and view tasks assigned by the admin.
+  - Manage donation records.
 
 ### **2. Donation Management**
 - **Add Donation**:
@@ -41,25 +40,27 @@ The **NGO Management Flutter App** is designed to streamline operations for NGOs
   - Enable one-time or recurring donations.
 - **Donation History**:
   - Allow donors to view their contributions and impact.
-  - Admins can generate financial reports.
-  
+  - Volunteers and Admins can edit or delete records.
+- **Donation Reports**:
+  - Admins can generate financial reports for transparency.
+
 ### **3. Event Management**
 - **Create and Manage Events**:
   - Admins can add, edit, or delete events.
 - **Event Registration**:
-  - Donors and volunteers can sign up or donate for events.
+  - Donors can register or donate for events.
 - **Event Reporting**:
   - Generate reports showing funds raised, participants, and event success.
-  
-### **6. Notifications**
+
+### **4. Notifications**
 - **Push Notifications**:
   - Real-time updates for events, tasks, and donations using Firebase Cloud Messaging.
 
-### **7. Financial Reporting**
+### **5. Financial Reporting**
 - Generate comprehensive reports for donations, expenses, and balances.
 - Export reports in formats like PDF or CSV.
 
-### **8. Payment Integration**
+### **6. Payment Integration**
 - Secure Stripe/PayPal payment gateway for donations and event ticket purchases.
 
 ---
@@ -70,15 +71,13 @@ The **NGO Management Flutter App** is designed to streamline operations for NGOs
 
 | **Screen Name**                 | **Admin**                          | **Donor**                  | **Volunteer**               | **Purpose**                                                                                          |
 |----------------------------------|------------------------------------|----------------------------|-----------------------------|------------------------------------------------------------------------------------------------------|
-| **Login Screen**                | Login as Admin.                   | Login to donate.           | Login to view tasks.        | Secure login for all users based on roles.                                                          |
-| **Dashboard Screen**            | Overview of all modules.          | Summary of donations.      | Overview of tasks.          | Role-based dashboard to provide quick insights.                                                     |
-| **Add Donation Screen**         | Monitor donations.                | Add donations.             | N/A                         | Admin tracks donations; Donor adds funds for events or causes.                                      |
-| **Donation History Screen**     | Generate reports.                 | View past donations.       | N/A                         | Admin generates detailed reports; Donors view personal history.                                     |
+| **Login Screen**                | Login as Admin.                   | Login to donate.           | Login to manage donations.  | Secure login for all users based on roles.                                                          |
+| **Dashboard Screen**            | Overview of all modules.          | Summary of donations.      | Overview of donations.      | Role-based dashboard to provide quick insights.                                                     |
+| **Add Donation Screen**         | Monitor donations.                | Add donations.             | Add donations.              | Admin tracks donations; Donor and Volunteer add funds for events or causes.                         |
+| **Donation History Screen**     | Generate reports.                 | View past donations.       | Edit or delete records.     | Admin generates detailed reports; Donors view personal history; Volunteers manage donation records. |
 | **Add Event Screen**            | Create, edit, and delete events.  | N/A                        | N/A                         | Admin can manage all events.                                                                        |
-| **Event List Screen**           | Monitor registrations.            | Register for events.       | Sign up for tasks.          | List of all upcoming and past events with participation details.                                     |
-| **Volunteer Management Screen** | Assign tasks to volunteers.       | N/A                        | View assigned tasks.        | Admin assigns tasks; Volunteers track progress.                                                     |
-| **Beneficiary List Screen**     | Track aid distributed.            | N/A                        | N/A                         | Admin manages beneficiary profiles and assistance records.                                           |
-| **Reports Screen**              | Generate financial/event reports. | View donation impact.      | View activity progress.     | Generate insights for transparency and performance evaluation.                                       |
+| **Event List Screen**           | Monitor registrations.            | Register for events.       | N/A                         | List of all upcoming and past events with participation details.                                     |
+| **Reports Screen**              | Generate financial/event reports. | View donation impact.      | N/A                         | Generate insights for transparency and performance evaluation.                                       |
 | **Notifications Screen**        | Manage all notifications.         | Receive alerts.            | Receive alerts.             | Notify users about new events, tasks, and donations.                                                |
 
 ---
@@ -89,7 +88,7 @@ The **NGO Management Flutter App** is designed to streamline operations for NGOs
 |----------|----------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | **1**    | Set up Flutter project, configure Firebase, implement authentication, and create navigation setup. | Authentication and navigation system.                        |
 | **2**    | Develop donation management and event management modules.                                          | Functional donation and event management screens.            |
-| **3**    | Build volunteer management and beneficiary management modules.                                     | Volunteer and beneficiary features with notification setup.  |
+| **3**    | Add notification functionality and implement donation editing and deletion.                        | Fully functional donation features with notifications.       |
 | **4**    | Test the app, refine UI/UX, finalize reporting modules, and deploy.                                | Fully tested app ready for deployment to app stores.         |
 
 ---
@@ -114,8 +113,7 @@ The **NGO Management Flutter App** is designed to streamline operations for NGOs
 ## **Roles and Functionality**
 
 ### **Admin**:
-- Manage all system modules (donations, events, beneficiaries, volunteers).
-- Assign volunteer tasks and monitor progress.
+- Manage events and donations.
 - Generate reports for stakeholders.
 
 ### **Donor**:
@@ -123,8 +121,7 @@ The **NGO Management Flutter App** is designed to streamline operations for NGOs
 - View donation history and impact reports.
 
 ### **Volunteer**:
-- View assigned tasks and update progress.
-- Participate in events by signing up for activities.
+- Add, edit, and delete donation records.
 
 ---
 
