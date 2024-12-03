@@ -50,18 +50,6 @@ The **NGO Management Flutter App** is designed to streamline operations for NGOs
   - Donors and volunteers can sign up or donate for events.
 - **Event Reporting**:
   - Generate reports showing funds raised, participants, and event success.
-
-### **4. Volunteer Management**
-- **Task Assignment**:
-  - Admins can assign tasks to volunteers.
-- **Task Tracking**:
-  - Volunteers can update and track task progress.
-
-### **5. Beneficiary Management**
-- **Create Profiles**:
-  - Admins can manage beneficiary details.
-- **Assistance Tracking**:
-  - Record the aid provided to each beneficiary.
   
 ### **6. Notifications**
 - **Push Notifications**:
