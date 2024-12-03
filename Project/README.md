@@ -1,37 +1,213 @@
-# Quiz App - Flutter
 
-A simple yet engaging **Quiz App** developed with **Flutter**. The app allows users to select quiz categories, answer questions, and even customize their questions. With a user-friendly interface and appealing design, it aims to enhance the quiz-taking experience.
+---
 
-## Features
+# NGO Management Flutter App
 
-- **Category Selection**: Choose from various categories such as Mind Questions, Programming Questions, General Knowledge, and Pakistan History.
-- **Custom Questions**: Users can add their own questions and answers.
-- **Quiz Functionality**: Answer questions with true/false options and track your score.
-- **Responsive UI**: Designed to be visually appealing with a gradient background and smooth transitions.
+## **Overview**
+The **NGO Management Flutter App** streamlines the operations of NGOs by providing a platform to manage donations, events, volunteers, beneficiaries, and finances. This app ensures transparency and effective engagement with donors and stakeholders.
 
-## Technologies Used
+---
 
-- **Flutter**: For building the UI and managing state.
-- **Dart**: The programming language used for app development.
+## **Features**
+1. **Authentication**:
+   - Secure login for Admins, Donors, and Volunteers.
+   - Firebase Authentication integration.
 
-## Screenshots
+2. **Donation Management**:
+   - Add donations (money, goods, services).
+   - Track donation history and generate financial reports.
 
-| Category Selection | Customize Questions  | Quiz Page|
-|--------------------|-----------|---------------------|
-| ![Category Selection](https://github.com/user-attachments/assets/7fb7e7b3-6be9-4f95-81db-5cb34823001f) | ![Quiz Page](https://github.com/user-attachments/assets/f8f647af-7999-4f27-b706-5b96a514e640) | ![Customize Questions](https://github.com/user-attachments/assets/83d46d09-2864-407f-8f14-ebca75abf11b) |
+3. **Event Management**:
+   - Plan and manage events.
+   - Allow users to register, donate, and buy tickets.
 
-## Demo Video
+4. **Volunteer Management**:
+   - Volunteer sign-ups and task assignments.
+   - Monitor progress and generate volunteer reports.
+
+5. **Beneficiary Management**:
+   - Manage profiles of beneficiaries.
+   - Track aid distribution and generate reports.
+
+6. **Push Notifications**:
+   - Notify users about events, donations, and updates using Firebase Cloud Messaging.
+
+---
+
+## **Project Structure**
+
+### **Screens**
+
+#### **1. Authentication Screens**
+- **Login Screen**:
+  - Functionality:
+    - Email/password login for Admin, Donor, and Volunteer.
+    - Role-based redirection to respective dashboards.
+  - Firebase Authentication integration.
+- **Registration Screen**:
+  - Functionality:
+    - New users can sign up (Donors, Volunteers).
+    - Validation for email and password inputs.
+- **Forgot Password Screen**:
+  - Functionality:
+    - Allow users to reset their password via email.
+
+---
+
+#### **2. Dashboard Screens**
+- **Admin Dashboard**:
+  - Overview of donations, events, volunteers, and beneficiaries.
+  - Metrics on funds raised and resources distributed.
+- **Donor Dashboard**:
+  - Summary of donations and event participation.
+  - Access donation history.
+- **Volunteer Dashboard**:
+  - View assigned tasks and completed hours.
+
+---
+
+#### **3. Donation Management Screens**
+- **Add Donation Screen**:
+  - Functionality:
+    - Donors can record monetary or in-kind donations.
+    - Payment gateway integration (Stripe/PayPal).
+- **Donation History Screen**:
+  - Functionality:
+    - View past donations with filters (date, event).
+- **Financial Reports Screen**:
+  - Functionality:
+    - Generate and export donation reports in PDF/CSV format.
+
+---
+
+#### **4. Event Management Screens**
+- **Event List Screen**:
+  - Functionality:
+    - Display upcoming and past events.
+    - Filter events by date or type.
+- **Event Details Screen**:
+  - Functionality:
+    - View event details, register, or donate.
+- **Event Management Screen (Admin)**:
+  - Functionality:
+    - Admins can create, edit, and delete events.
+    - Track event registration and ticket sales.
+
+---
+
+#### **5. Volunteer Management Screens**
+- **Volunteer Registration Screen**:
+  - Functionality:
+    - Volunteers can sign up with skills and availability.
+- **Task Assignment Screen (Admin)**:
+  - Functionality:
+    - Assign tasks to volunteers and monitor their progress.
+- **Volunteer Progress Screen**:
+  - Functionality:
+    - Track volunteer hours and task completions.
+
+---
+
+#### **6. Beneficiary Management Screens**
+- **Beneficiary List Screen**:
+  - Functionality:
+    - Display a list of beneficiaries with filtering options.
+- **Beneficiary Profile Screen**:
+  - Functionality:
+    - View details of a beneficiary and aid received.
+- **Assistance Tracking Screen**:
+  - Functionality:
+    - Admins can track the type and amount of aid given.
+
+---
+
+#### **7. Notifications**
+- **Push Notifications**:
+  - Firebase Cloud Messaging integration.
+  - Notify users about events, updates, and donation statuses.
+- **In-App Notifications**:
+  - Real-time updates on tasks, events, or donations.
+
+---
+
+#### **8. Settings Screen**
+- **User Profile Management**:
+  - Functionality:
+    - Update user details and preferences.
+- **App Settings**:
+  - Functionality:
+    - Toggle notifications and adjust app preferences.
+
+---
+
+## **Project Timeline**
+
+| **Week** | **Tasks**                                                                                                   | **Deliverables**                                              |
+|----------|-----------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| **1**    | Set up project, configure Firebase, implement authentication, and create dashboards.                       | Authentication screens and navigation system.                |
+| **2**    | Develop donation and event management screens.                                                             | Donation and Event screens with payment integration.         |
+| **3**    | Build volunteer and beneficiary management modules and set up push notifications.                          | Volunteer, Beneficiary, and Notification features.           |
+| **4**    | Test the app, polish UI/UX, finalize report generation, and deploy the app to app stores.                  | Fully tested and polished app ready for deployment.          |
+
+---
+
+## **Technical Details**
+
+### **Frontend**:
+- **Framework**: Flutter (Dart)
+- **Design**: Material Design principles for a clean, intuitive interface.
+
+### **Backend**:
+- **Firebase Firestore**: Real-time database management.
+- **Firebase Authentication**: Secure login functionality.
+- **Firebase Cloud Messaging**: Push notifications.
+- **Stripe/PayPal**: Payment gateway integration.
+
+### **State Management**:
+- **Provider**: Efficient state management for scalable applications.
+
+---
+
+## **Installation**
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd ngo-management-app
+
+2. Install dependencies:
+
+flutter pub get
 
 
-https://github.com/user-attachments/assets/e6d0ab15-78a3-4b77-8541-28b4558242da
+3. Run the app:
+
+flutter run
 
 
-## How to Run
+4. Set up Firebase:
 
-Follow these steps to run the project on your local machine:
+Add google-services.json (Android) and GoogleService-Info.plist (iOS) files to the project.
 
-### 1. Clone the repository
 
-```bash
-git clone https://github.com/your-username/quiz_app.git
-cd quiz_app
+
+
+
+---
+
+Milestones
+
+
+---
+
+Deliverables
+
+Fully functioning NGO Management Flutter App.
+
+Complete source code, Firebase configurations, and documentation.
+
+Deployment-ready app for both Android and iOS.
+
+
+Let me know if you'd like further assistance!
+
