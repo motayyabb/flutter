@@ -1,4 +1,4 @@
-# assistant
+# assitantapp
 
 A new Flutter project.
 
