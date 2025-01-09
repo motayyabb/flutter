@@ -27,6 +27,9 @@
       <excludeFolder url="file://$MODULE_DIR$/xylophone/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/xylophone/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/xylophone/build" />
+      <excludeFolder url="file://$MODULE_DIR$/Student Assitant App/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/Student Assitant App/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/Student Assitant App/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
